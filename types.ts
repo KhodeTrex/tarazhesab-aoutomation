@@ -15,3 +15,19 @@ export enum ProjectModule {
   Blog = 'وبلاگ',
   Assets = 'اموال',
 }
+
+export interface Issue {
+  id: number;
+  project: string;
+  issueType: string;
+  subject: string;
+  description?: string;
+  status: string;
+  priority: string;
+  assignee?: string;
+  startDate?: string;
+  dueDate?: string;
+  createdAt: string;
+  updatedAt: string;
+  [key: string]: any; 
+}
