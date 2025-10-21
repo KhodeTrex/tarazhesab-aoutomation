@@ -81,14 +81,14 @@ const NewIssuePage = () => {
     
     const LabeledInput: React.FC<{label: string, id: string, children: React.ReactNode, className?: string}> = ({label, id, children, className}) => (
         <div className={`flex flex-row-reverse items-center ${className}`}>
-            <label htmlFor={id} className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">{label}</label>
+            <label htmlFor={id} className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">{label}</label>
             <div className="w-full">{children}</div>
         </div>
     );
 
     const FileInput: React.FC<{label: string}> = ({label}) => (
         <div className="flex flex-row-reverse items-center">
-             <span className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">{label}</span>
+             <span className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">{label}</span>
              <div className="flex items-center text-sm">
                 <input type="file" className="text-xs w-full"/>
                  <span className="text-xs text-gray-500 whitespace-nowrap">(بیشترین اندازه: ۱۰ مگابایت)</span>
@@ -114,7 +114,7 @@ const NewIssuePage = () => {
                              <div>
                                 <label htmlFor="project" className="block text-sm font-medium text-gray-700 mb-1">پروژه <span className="text-red-500">*</span></label>
                                 <select id="project" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
-                                 defaultValue={['وضعیت پرونده مالیاتی', 'تحویل مدارک - مکاتبات - تایید درآمد'].includes(selectedIssueType) ? 'واحد عملکرد مالیاتی' : ''}
+                                 defaultValue={['وضعیت پرونده مالیاتی', 'تحویل مدارک - مکاتبات - تایید درآمد', 'درصد پیشرفت کار شرکت', 'پاداش و جرایم'].includes(selectedIssueType) ? 'واحد عملکرد مالیاتی' : ''}
                                 >
                                     <option>--- انتخاب کنید ---</option>
                                     <option>واحد عملکرد مالیاتی</option>
@@ -262,7 +262,7 @@ const NewIssuePage = () => {
                                         </select>
                                     </LabeledInput>
                                      <div className="flex flex-row-reverse items-start">
-                                          <label className="w-40 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">نتیجه رسیدگی</label>
+                                          <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">نتیجه رسیدگی</label>
                                           <div className="w-full space-y-2 text-sm">
                                             {['در انتظار صدور برگ تشخیص', 'در انتظار بررسی برگ تشخیص (واحد اجرایی)', 'قبول برگ تشخیص', 'اعتراض', 'برگ قطعی صادر شد'].map(option => (
                                                  <div key={option} className="flex items-center">
@@ -310,11 +310,11 @@ const NewIssuePage = () => {
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
                                  <div className="flex flex-row-reverse">
-                                    <label htmlFor="description-tax" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">توضیح</label>
+                                    <label htmlFor="description-tax" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">توضیح</label>
                                     <textarea id="description-tax" rows={6} className="block w-full border border-gray-300 rounded-md focus:ring-sky-500 focus:border-sky-500 sm:text-sm p-3"></textarea>
                                 </div>
                                  <div className="flex flex-row-reverse">
-                                    <label htmlFor="management-note-tax" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">رونوشت مدیریت</label>
+                                    <label htmlFor="management-note-tax" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">رونوشت مدیریت</label>
                                     <textarea id="management-note-tax" rows={6} className="block w-full border border-gray-300 rounded-md focus:ring-sky-500 focus:border-sky-500 sm:text-sm p-3"></textarea>
                                 </div>
                             </div>
@@ -447,30 +447,30 @@ const NewIssuePage = () => {
                                 {/* Right Column in UI */}
                                 <div className="space-y-4">
                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="subject-doc" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">موضوع</label>
+                                        <label htmlFor="subject-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">موضوع</label>
                                         <input id="subject-doc" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                                     </div>
                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="start-date-doc" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">تاریخ آغاز</label>
+                                        <label htmlFor="start-date-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">تاریخ آغاز</label>
                                         <div className="relative w-full">
                                             <input id="start-date-doc" type="text" defaultValue="1404-07-28" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
                                             <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
                                         </div>
                                     </div>
                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="status-doc" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">وضعیت</label>
+                                        <label htmlFor="status-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">وضعیت</label>
                                         <select id="status-doc" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="برای انجام">
                                             {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
                                         </select>
                                     </div>
                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="priority-doc" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">اولویت</label>
+                                        <label htmlFor="priority-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">اولویت</label>
                                         <select id="priority-doc" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="معمولی">
                                              {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
                                         </select>
                                     </div>
                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="assignee-doc" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">مسئول</label>
+                                        <label htmlFor="assignee-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">مسئول</label>
                                         <div className="relative w-full">
                                             <select id="assignee-doc" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
                                                 <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
@@ -479,13 +479,13 @@ const NewIssuePage = () => {
                                         </div>
                                     </div>
                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="year-doc" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">سال</label>
+                                        <label htmlFor="year-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">سال</label>
                                         <select id="year-doc" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="1404">
                                            <option>1404</option><option>1403</option><option>1402</option>
                                         </select>
                                     </div>
                                     <div className="flex flex-row-reverse">
-                                        <label htmlFor="financial-note-doc" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">رونوشت مالی</label>
+                                        <label htmlFor="financial-note-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">رونوشت مالی</label>
                                         <textarea id="financial-note-doc" rows={6} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
                                     </div>
                                 </div>
@@ -493,7 +493,7 @@ const NewIssuePage = () => {
                                 {/* Left Column in UI */}
                                 <div className="space-y-4">
                                      <div className="flex flex-row-reverse items-start">
-                                          <label className="w-48 text-sm font-medium text-gray-700 text-left shrink-0 pt-1">نوع مدارک <span className="text-red-500">*</span></label>
+                                          <label className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-1">نوع مدارک <span className="text-red-500">*</span></label>
                                           <div className="w-full space-y-2 text-sm">
                                             {['اسناد رسیدگی', 'اسناد داخلی شرکت', 'زونکن متفرقه', 'دفاتر', 'مهر شرکت'].map(option => (
                                                  <div key={option} className="flex items-center">
@@ -504,30 +504,30 @@ const NewIssuePage = () => {
                                           </div>
                                      </div>
                                      <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="storage-loc-doc" className="w-48 text-sm font-medium text-gray-700 text-left shrink-0">محل نگهداری مدارک <span className="text-red-500">*</span></label>
+                                        <label htmlFor="storage-loc-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">محل نگهداری مدارک <span className="text-red-500">*</span></label>
                                         <select id="storage-loc-doc" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"><option>--- انتخاب کنید ---</option></select>
                                     </div>
                                     <div className="flex flex-row-reverse">
-                                        <label htmlFor="financial-opinion-doc" className="w-48 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">اظهار نظر واحد مالی جهت تحویل</label>
+                                        <label htmlFor="financial-opinion-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">اظهار نظر واحد مالی جهت تحویل</label>
                                         <textarea id="financial-opinion-doc" rows={3} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
                                     </div>
                                     <div className="flex flex-row-reverse">
-                                        <label htmlFor="response-opinion-doc" className="w-48 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">اظهار نظر واحد پاسخگویی جهت تحویل</label>
+                                        <label htmlFor="response-opinion-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">اظهار نظر واحد پاسخگویی جهت تحویل</label>
                                         <textarea id="response-opinion-doc" rows={3} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
                                     </div>
                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="deliverer-doc" className="w-48 text-sm font-medium text-gray-700 text-left shrink-0">تحویل دهنده</label>
+                                        <label htmlFor="deliverer-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">تحویل دهنده</label>
                                         <select id="deliverer-doc" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"><option>--- انتخاب کنید ---</option></select>
                                     </div>
                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="receiver-doc" className="w-48 text-sm font-medium text-gray-700 text-left shrink-0">تحویل گیرنده تایید کننده</label>
+                                        <label htmlFor="receiver-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">تحویل گیرنده تایید کننده</label>
                                         <input id="receiver-doc" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                                     </div>
                                 </div>
                             </div>
                              <div className="border-t pt-6 mt-6 space-y-6">
                                 <div className="flex flex-row-reverse items-center">
-                                    <label className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">پیوست‌ها</label>
+                                    <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">پیوست‌ها</label>
                                     <div className="flex items-center gap-2">
                                         <button type="button" className="text-gray-500 hover:text-sky-600">
                                             <AddAttachmentIcon />
@@ -536,8 +536,362 @@ const NewIssuePage = () => {
                                     </div>
                                 </div>
                                  <div className="flex flex-row-reverse items-center">
-                                    <label htmlFor="watchers-doc" className="w-40 text-sm font-medium text-gray-700 text-left shrink-0">ناظرها</label>
+                                    <label htmlFor="watchers-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">ناظرها</label>
                                     <input id="watchers-doc" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                                </div>
+                            </div>
+                        </div>
+                    ) : selectedIssueType === 'درصد پیشرفت کار شرکت' ? (
+                        <div className="space-y-6">
+                            {/* Standard fields */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                                <div className="space-y-3">
+                                    <LabeledInput label="موضوع" id="subject-progress">
+                                        <input type="text" id="subject-progress" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                                    </LabeledInput>
+                                    <LabeledInput label="وضعیت" id="status-progress">
+                                        <select id="status-progress" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm" defaultValue="برای انجام">
+                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
+                                        </select>
+                                    </LabeledInput>
+                                    <LabeledInput label="اولویت" id="priority-progress">
+                                        <select id="priority-progress" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm" defaultValue="معمولی">
+                                            {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
+                                        </select>
+                                    </LabeledInput>
+                                </div>
+                                <div className="space-y-3">
+                                    <LabeledInput label="مسئول" id="assignee-progress">
+                                        <div className="relative w-full">
+                                            <select id="assignee-progress" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm">
+                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
+                                            </select>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
+                                        </div>
+                                    </LabeledInput>
+                                    <LabeledInput label="سال" id="year-progress">
+                                        <select id="year-progress" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm" defaultValue="1404">
+                                        <option>1404</option><option>1403</option><option>1402</option>
+                                        </select>
+                                    </LabeledInput>
+                                </div>
+                            </div>
+
+                            {/* Detailed fields */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-1 pt-6 mt-6 border-t border-gray-200">
+                                {/* Column 1 */}
+                                <div className="space-y-2">
+                                    { [ 'مبلغ سال یاد شده', 'ثبت صحیح فروش', 'ثبت فاکتور فروش', 'معرفی مفصل شفق فروش', 'ثبت مشخصات کارفرما فروش', 'معرفی مرکز اصلی فروش', 'آدرس و تلفنهای فروش', 'خلاصه فروش، الحاقیه، ضمن', 'معرفی عامل اصلی فروش', 'ثبت معاملات در برنامه فروش', 'ثبت صحیح نام کارفرما / خرید', 'معرفی مفصل شفق خرید', 'ثبت مشخصات فروشنده / خرید', 'معرفی مرکز هزینه خرید', 'اثبات پرداخت خرید', 'ثبت معاملات اصلی / خرید', 'مقایسه خرید با معاملات فصلی', 'ثبت صحیح هزینه حقوق', 'ارسال لیست حقوق / هزینه حقوق', 'ارسال لیست بیمه/هزینه حقوق', 'ثبت پرداخت اجاره/هزینه حقوق', 'پیگیری بابت فاکتور/سایر هزینه', 'ثبت پرداخت سایر هزینه', 'هزینه استهلاک / سایر هزینه', 'وضعیت ثبت اداری محل اجاره', 'پرینت بانک / ترازنامه', 'معرفی نسخه بانک ها/ترازنامه', 'کنترل اظهارنامه ارسالی/ترازنامه', 'سند افتتاحیه/ترازنامه', 'موجودی کالا/ترازنامه', 'حسین - حسابها و اسناد/ترازنامه' ].map(label => {
+                                        const id = `progress-${label.replace(/[\s/]/g, '-')}`;
+                                        return (
+                                            <div key={id} className="flex flex-row-reverse items-center">
+                                                <label htmlFor={id} className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">{label}</label>
+                                                <input id={id} type="text" className="w-full bg-white border border-gray-300 rounded-md py-1 px-2 text-sm"/>
+                                            </div>
+                                        )
+                                    }) }
+                                </div>
+                                {/* Column 2 */}
+                                <div className="space-y-2">
+                                    { [ 'ثبت مدت صحیح قرارداد', 'رسیدگی و اقدام برتر شده', 'پیوست فروش', 'پیوست خرید و هزینه ها', 'پیوست حقوق', 'پیوست بیمه پرداخت ها', 'تحریر دفاتر', 'ثبت افتتاحیه', 'رسیدگی ارزش افزوده', 'پیگیری بعد از رسیدگی', 'حداقل های مورد نیاز رسیدگی' ].map(label => {
+                                        const id = `progress-${label.replace(/[\s/]/g, '-')}`;
+                                        return (
+                                            <div key={id} className="flex flex-row-reverse items-center">
+                                                <label htmlFor={id} className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">{label}</label>
+                                                <input id={id} type="text" className="w-full bg-white border border-gray-300 rounded-md py-1 px-2 text-sm"/>
+                                            </div>
+                                        )
+                                    }) }
+                                </div>
+                                {/* Column 3 */}
+                                <div className="space-y-2">
+                                    <div className="flex flex-row-reverse items-center">
+                                        <label htmlFor="work-group-progress" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">گروه کاری</label>
+                                        <select id="work-group-progress" className="block w-full px-3 py-1 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"><option>---</option></select>
+                                    </div>
+                                    { [ 'اعتبار/ تعداد اسناد', 'ارزش اعتبار', 'امتیاز برگشت', 'امتیاز یک ها', 'جریمه / حمایت پرداختی', 'شناسنامه حساب سود و زیان' ].map(label => {
+                                        const id = `progress-${label.replace(/[\s/]/g, '-')}`;
+                                        return (
+                                            <div key={id} className="flex flex-row-reverse items-center">
+                                                <label htmlFor={id} className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">{label}</label>
+                                                <input id={id} type="text" className="w-full bg-white border border-gray-300 rounded-md py-1 px-2 text-sm"/>
+                                            </div>
+                                        )
+                                    }) }
+                                </div>
+                                {/* Column 4 */}
+                                <div className="space-y-2">
+                                    { [ 'اسناد کارفرما/معاملات', 'اسناد قراردادها/شرکت', 'دلایل موجودی طلبکار/بدهکار', 'تعدیلات انحرافی', 'اسناد تصفیه اشخاص', 'جریمه کلیه سالها', 'رسیدگی مالیات حقوق وسطح', 'پیگیری / فصل / ترمیمی', 'پرداختی / مفاصا/ جریمه ها', 'اسناد گزارشات', 'پرداخت شده / فروردین', 'پرداختی / اردیبهشت', 'پرداختی / خرداد', 'پرداختی / تیر', 'پرداختی / مرداد', 'پرداختی / شهریور', 'پرداختی / مهر' ].map(label => {
+                                        const id = `progress-${label.replace(/[\s/]/g, '-')}`;
+                                        return (
+                                            <div key={id} className="flex flex-row-reverse items-center">
+                                                <label htmlFor={id} className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">{label}</label>
+                                                <input id={id} type="text" className="w-full bg-white border border-gray-300 rounded-md py-1 px-2 text-sm"/>
+                                            </div>
+                                        )
+                                    }) }
+                                </div>
+                            </div>
+
+                            <div className="border-t pt-6 mt-6 space-y-6">
+                                <div className="flex flex-row-reverse items-center">
+                                    <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">پیوست‌ها</label>
+                                    <div className="flex items-center gap-2">
+                                        <button type="button" className="text-gray-500 hover:text-sky-600">
+                                            <AddAttachmentIcon />
+                                        </button>
+                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
+                                    </div>
+                                </div>
+                                <div className="flex flex-row-reverse items-center">
+                                    <label htmlFor="watchers-progress" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">ناظرها</label>
+                                    <input id="watchers-progress" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                                </div>
+                            </div>
+                        </div>
+                    ) : selectedIssueType === 'درخواست لوازم مصرفی' ? (
+                        <div className="space-y-6">
+                            <div>
+                                <label htmlFor="subject-consumables" className="block text-sm font-medium text-gray-700 mb-1">موضوع</label>
+                                <input type="text" id="subject-consumables" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="description-consumables" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
+                                <div className="border border-gray-300 rounded-md">
+                                    <EditorToolbar />
+                                    <textarea id="description-consumables" rows={8} className="block w-full border-0 rounded-b-md focus:ring-0 sm:text-sm p-3"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pt-6 mt-6 border-t border-gray-200">
+                                {/* Right Column in UI */}
+                                <div className="space-y-4">
+                                     <div className="flex flex-row-reverse items-center">
+                                        <label htmlFor="status-consumables" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">وضعیت</label>
+                                        <select id="status-consumables" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="برای انجام">
+                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
+                                        </select>
+                                    </div>
+                                    <div className="flex flex-row-reverse items-center">
+                                        <label htmlFor="priority-consumables" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">اولویت</label>
+                                        <select id="priority-consumables" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="معمولی">
+                                             {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
+                                        </select>
+                                    </div>
+                                    <div className="flex flex-row-reverse items-center">
+                                        <label htmlFor="assignee-consumables" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">مسئول</label>
+                                        <div className="relative w-full">
+                                            <select id="assignee-consumables" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
+                                            </select>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row-reverse items-center">
+                                        <label htmlFor="due-date-consumables" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">تاریخ انجام</label>
+                                        <div className="relative w-full">
+                                            <input id="due-date-consumables" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row-reverse items-center">
+                                        <label htmlFor="item-name-consumables" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">نام کالا</label>
+                                        <select id="item-name-consumables" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                            <option>--- انتخاب کنید ---</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {/* Left Column in UI */}
+                                <div className="space-y-4">
+                                     <div className="flex flex-row-reverse items-center">
+                                        <label htmlFor="work-group-consumables" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">گروه کاری</label>
+                                        <select id="work-group-consumables" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                            <option>---</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                             <div className="border-t pt-6 mt-6">
+                                <div className="flex flex-row-reverse items-center">
+                                    <label className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">پیوست‌ها</label>
+                                    <div className="flex items-center gap-2">
+                                        <button type="button" className="text-gray-500 hover:text-sky-600">
+                                            <AddAttachmentIcon />
+                                        </button>
+                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : selectedIssueType === 'حواله خروجی' ? (
+                        <div className="space-y-6">
+                            <div>
+                                <label htmlFor="subject-exit" className="block text-sm font-medium text-gray-700 mb-1">موضوع</label>
+                                <input type="text" id="subject-exit" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="description-exit" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
+                                <div className="border border-gray-300 rounded-md">
+                                    <EditorToolbar />
+                                    <textarea id="description-exit" rows={8} className="block w-full border-0 rounded-b-md focus:ring-0 sm:text-sm p-3"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pt-6 mt-6 border-t border-gray-200">
+                                {/* Right Column in UI */}
+                                <div className="space-y-4">
+                                     <LabeledInput label="وضعیت" id="status-exit">
+                                        <select id="status-exit" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="برای انجام">
+                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
+                                        </select>
+                                    </LabeledInput>
+                                    <LabeledInput label="اولویت" id="priority-exit">
+                                        <select id="priority-exit" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="معمولی">
+                                             {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
+                                        </select>
+                                    </LabeledInput>
+                                    <LabeledInput label="مسئول" id="assignee-exit">
+                                        <div className="relative w-full">
+                                            <select id="assignee-exit" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
+                                            </select>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
+                                        </div>
+                                    </LabeledInput>
+                                     <LabeledInput label="نام کالا" id="item-name-exit">
+                                        <select id="item-name-exit" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                            <option>--- انتخاب کنید ---</option>
+                                        </select>
+                                    </LabeledInput>
+                                </div>
+                                {/* Left Column in UI */}
+                                <div className="space-y-4">
+                                    <LabeledInput label="تاریخ آغاز" id="start-date-exit">
+                                        <div className="relative w-full">
+                                            <input id="start-date-exit" type="text" defaultValue="۱۴۰۴-۰۷-۲۸" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
+                                        </div>
+                                    </LabeledInput>
+                                    <LabeledInput label="تاریخ سررسید" id="due-date-exit">
+                                        <div className="relative w-full">
+                                            <input id="due-date-exit" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
+                                        </div>
+                                    </LabeledInput>
+                                     <LabeledInput label="گروه کاری" id="work-group-exit">
+                                        <select id="work-group-exit" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                            <option>---</option>
+                                        </select>
+                                    </LabeledInput>
+                                </div>
+                            </div>
+
+                             <div className="border-t pt-6 mt-6 space-y-6">
+                                <div className="flex flex-row-reverse items-center">
+                                    <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">پیوست‌ها</label>
+                                    <div className="flex items-center gap-2">
+                                        <button type="button" className="text-gray-500 hover:text-sky-600">
+                                            <AddAttachmentIcon />
+                                        </button>
+                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
+                                    </div>
+                                </div>
+                                 <div className="flex flex-row-reverse items-center">
+                                    <label htmlFor="watchers-exit" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">ناظرها</label>
+                                    <input id="watchers-exit" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                                </div>
+                            </div>
+                        </div>
+                    ) : selectedIssueType === 'پاداش و جرایم' ? (
+                        <div className="space-y-6">
+                            <div>
+                                <label htmlFor="subject-bonus" className="block text-sm font-medium text-gray-700 mb-1">موضوع</label>
+                                <input type="text" id="subject-bonus" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="description-bonus" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
+                                <div className="border border-gray-300 rounded-md">
+                                    <EditorToolbar />
+                                    <textarea id="description-bonus" rows={8} className="block w-full border-0 rounded-b-md focus:ring-0 sm:text-sm p-3"></textarea>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pt-6 mt-6 border-t border-gray-200">
+                                {/* Right Column in UI */}
+                                <div className="space-y-4">
+                                    <LabeledInput label="وضعیت" id="status-bonus">
+                                        <select id="status-bonus" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="برای انجام">
+                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
+                                        </select>
+                                    </LabeledInput>
+                                    <LabeledInput label="اولویت" id="priority-bonus">
+                                        <select id="priority-bonus" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="معمولی">
+                                            {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
+                                        </select>
+                                    </LabeledInput>
+                                    <LabeledInput label="مسئول" id="assignee-bonus">
+                                        <div className="relative w-full">
+                                            <select id="assignee-bonus" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
+                                            </select>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
+                                        </div>
+                                    </LabeledInput>
+                                    <LabeledInput label="سال" id="year-bonus">
+                                        <select id="year-bonus" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm" defaultValue="1404">
+                                        <option>1404</option><option>1403</option><option>1402</option>
+                                        </select>
+                                    </LabeledInput>
+                                    <LabeledInput label="مبلغ درآمد سال یاد شده" id="income-bonus">
+                                        <input type="text" id="income-bonus" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                                    </LabeledInput>
+                                </div>
+                                {/* Left Column in UI */}
+                                <div className="space-y-4">
+                                    <LabeledInput label="تاریخ آغاز" id="start-date-bonus">
+                                        <div className="relative w-full">
+                                            <input id="start-date-bonus" type="text" defaultValue="۱۴۰۴-۰۷-۲۸" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
+                                        </div>
+                                    </LabeledInput>
+                                    <LabeledInput label="تاریخ سررسید" id="due-date-bonus">
+                                        <div className="relative w-full">
+                                            <input id="due-date-bonus" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
+                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
+                                        </div>
+                                    </LabeledInput>
+                                    <LabeledInput label="زمان برآورد شده" id="estimated-time-bonus">
+                                        <div className="flex items-center w-full">
+                                            <input id="estimated-time-bonus" type="text" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                                            <span className="mr-2 text-sm text-gray-500">ساعت</span>
+                                        </div>
+                                    </LabeledInput>
+                                    <LabeledInput label="انجام شده %" id="done-ratio-bonus">
+                                        <select id="done-ratio-bonus" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                            {['0 %', '10 %', '20 %', '30 %', '40 %', '50 %', '60 %', '70 %', '80 %', '90 %', '100 %'].map(p => <option key={p}>{p}</option>)}
+                                        </select>
+                                    </LabeledInput>
+                                    <LabeledInput label="گروه کاری" id="work-group-bonus">
+                                        <select id="work-group-bonus" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
+                                            <option>---</option>
+                                        </select>
+                                    </LabeledInput>
+                                </div>
+                            </div>
+
+                            <div className="border-t pt-6 mt-6">
+                                <div className="flex flex-row-reverse items-center">
+                                    <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">پیوست‌ها</label>
+                                    <div className="flex items-center gap-2">
+                                        <button type="button" className="text-gray-500 hover:text-sky-600">
+                                            <AddAttachmentIcon />
+                                        </button>
+                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
