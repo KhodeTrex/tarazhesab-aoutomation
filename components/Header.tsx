@@ -7,6 +7,10 @@ interface HeaderProps {
   isAdmin: boolean;
   username: string;
   onLogout: () => void;
+  onBack: () => void;
+  onForward: () => void;
+  canBack: boolean;
+  canForward: boolean;
 }
 
 const baseNavItems = [
@@ -31,9 +35,11 @@ const LogoutIcon = () => (
 );
 const SearchIcon = ({className = "h-5 w-5 text-gray-300"}) => (<svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>);
 const ChevronDownIcon = ({className = "h-5 w-5 text-white"}) => (<svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>);
+const ChevronRightIcon = ({className = "h-5 w-5 text-white"}) => (<svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>);
+const ChevronLeftIcon = ({className = "h-5 w-5 text-white"}) => (<svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>);
 
 
-export const Header: React.FC<HeaderProps> = ({ activeView, setActiveView, isAdmin, username, onLogout }) => {
+export const Header: React.FC<HeaderProps> = ({ activeView, setActiveView, isAdmin, username, onLogout, onBack, onForward, canBack, canForward }) => {
   const navItems = [...baseNavItems];
   if (isAdmin) {
       const homeIndex = navItems.findIndex(item => item.id === View.HomePage);
@@ -61,6 +67,24 @@ export const Header: React.FC<HeaderProps> = ({ activeView, setActiveView, isAdm
                     <button onClick={onLogout} className="w-full text-right block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">خروج</button>
                 </div>
             </div>
+             <div className="flex items-center gap-x-2 mr-4">
+                <button
+                    onClick={onBack}
+                    disabled={!canBack}
+                    className="p-1.5 rounded-full text-white disabled:text-gray-400 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
+                    aria-label="بازگشت"
+                >
+                    <ChevronRightIcon />
+                </button>
+                <button
+                    onClick={onForward}
+                    disabled={!canForward}
+                    className="p-1.5 rounded-full text-white disabled:text-gray-400 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
+                    aria-label="جلو"
+                >
+                    <ChevronLeftIcon />
+                </button>
+            </div>
           </div>
 
           {/* Right side in RTL */}
@@ -72,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({ activeView, setActiveView, isAdm
                             <button 
                             onClick={() => setActiveView(item.id)}
                             className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                                activeView === item.id 
+                                activeView.startsWith(item.label)
                                 ? 'bg-white/20 text-white' 
                                 : 'text-gray-300 hover:bg-white/10 hover:text-white'
                             }`}

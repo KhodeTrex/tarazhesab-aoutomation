@@ -6,7 +6,10 @@ import { View, Issue } from './types';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [activeView, setActiveView] = useState<View>(View.HomePage);
+  const [history, setHistory] = useState<View[]>([View.HomePage]);
+  const [historyIndex, setHistoryIndex] = useState(0);
+  const activeView = history[historyIndex];
+
   const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState('');
   
@@ -15,6 +18,29 @@ function App() {
     { id: 85176, project: 'واحد عملکرد مالیاتی', issueType: 'درخواست خدمات', subject: 'ویرایش و ارسال معاملات فصلی شرکت آراس سلامت محور', status: 'در حال بررسی', priority: 'زیاد', createdAt: '1404/07/28 13:03', updatedAt: '1404/07/28 13:03', assignee: 'فریده آلبوغیش' },
     { id: 85163, project: 'واحد عملکرد مالیاتی', issueType: 'درخواست لوازم مصرفی', subject: '3 بسته آچار', status: 'انجام شده', priority: 'کم', createdAt: '1404/07/28 09:33', updatedAt: '1404/07/28 09:33', assignee: 'رضا شریفیات' },
   ]);
+
+  const setActiveView = (view: View) => {
+    if (view === activeView) return; // Do not push same view consecutively
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(view);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  };
+
+  const goBack = () => {
+    if (historyIndex > 0) {
+      setHistoryIndex(prev => prev - 1);
+    }
+  };
+
+  const goForward = () => {
+    if (historyIndex < history.length - 1) {
+      setHistoryIndex(prev => prev + 1);
+    }
+  };
+
+  const canGoBack = historyIndex > 0;
+  const canGoForward = historyIndex < history.length - 1;
 
   const handleCreateIssue = (newIssueData: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>) => {
     // FIX: The original type inference was failing. By removing the explicit type on `newIssue`
@@ -47,7 +73,8 @@ function App() {
     setIsLoggedIn(false);
     setIsAdmin(false);
     setUsername('');
-    setActiveView(View.HomePage);
+    setHistory([View.HomePage]);
+    setHistoryIndex(0);
   };
 
   if (!isLoggedIn) {
@@ -62,11 +89,16 @@ function App() {
         isAdmin={isAdmin} 
         username={username}
         onLogout={handleLogout}
+        onBack={goBack}
+        onForward={goForward}
+        canBack={canGoBack}
+        canForward={canGoForward}
       />
       <main className="p-6 sm:p-8">
         <div className="max-w-7xl mx-auto">
           <MainContent 
             activeView={activeView} 
+            setActiveView={setActiveView}
             isAdmin={isAdmin}
             issues={issues}
             onCreateIssue={handleCreateIssue}

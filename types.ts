@@ -4,17 +4,23 @@ export enum View {
   Projects = 'پروژه ها',
   Help = 'راهنما',
   Management = 'راه بری',
-}
 
-export enum ProjectModule {
-  Overview = 'پروژه',
-  Timeline = 'خط زمان',
-  Issues = 'مسئله ها',
-  Times = 'زمان ها',
-  Gantt = 'گانت',
-  Calendar = 'تقویم',
-  Blog = 'وبلاگ',
-  Assets = 'اموال',
+  // Management sub-views
+  ManagementUsers = 'راه بری/کاربران',
+  ManagementNewUser = 'راه بری/کاربر جدید',
+  ManagementGroups = 'راه بری/گروه ها',
+  ManagementNewGroup = 'راه بری/گروه جدید',
+  
+  // Projects sub-views
+  ProjectsOverview = 'پروژه ها/پروژه',
+  ProjectsTimeline = 'پروژه ها/خط زمان',
+  ProjectsIssues = 'پروژه ها/مسئله ها',
+  ProjectsNewIssue = 'پروژه ها/مسئله جدید',
+  ProjectsTimes = 'پروژه ها/زمان ها',
+  ProjectsGantt = 'پروژه ها/گانت',
+  ProjectsCalendar = 'پروژه ها/تقویم',
+  ProjectsBlog = 'پروژه ها/وبلاگ',
+  ProjectsAssets = 'پروژه ها/اموال',
 }
 
 export interface Issue {

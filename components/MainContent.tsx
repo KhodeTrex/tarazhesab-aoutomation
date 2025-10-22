@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ProjectModule, Issue } from '../types';
+import { View, Issue } from '../types';
 import { TimelinePage } from './TimelinePage';
 import { CalendarPage } from './CalendarPage';
 import { ManagementPage } from './ManagementPage';
@@ -27,6 +27,7 @@ const AddAttachmentIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" classN
 
 interface MainContentProps {
   activeView: View;
+  setActiveView: (view: View) => void;
   isAdmin: boolean;
   issues: Issue[];
   onCreateIssue: (issue: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -1183,20 +1184,30 @@ const IssuesListPage: React.FC<IssuesListPageProps> = ({ issues, onNewIssueClick
 
 
 interface ProjectsPageProps {
+    activeView: View;
+    setActiveView: (view: View) => void;
     isAdmin: boolean;
     issues: Issue[];
     onCreateIssue: (issue: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>) => void;
 }
 
-const ProjectsPage: React.FC<ProjectsPageProps> = ({ isAdmin, issues, onCreateIssue }) => {
-    const [activeModule, setActiveModule] = useState<ProjectModule>(ProjectModule.Issues);
-    const [showNewIssueForm, setShowNewIssueForm] = useState(false);
+const ProjectsPage: React.FC<ProjectsPageProps> = ({ activeView, setActiveView, isAdmin, issues, onCreateIssue }) => {
+    const modules = [
+        { id: View.ProjectsOverview, label: 'پروژه' },
+        { id: View.ProjectsTimeline, label: 'خط زمان' },
+        { id: View.ProjectsIssues, label: 'مسئله ها' },
+        { id: View.ProjectsTimes, label: 'زمان ها' },
+        { id: View.ProjectsGantt, label: 'گانت' },
+        { id: View.ProjectsCalendar, label: 'تقویم' },
+        { id: View.ProjectsBlog, label: 'وبلاگ' },
+        { id: View.ProjectsAssets, label: 'اموال' },
+    ];
     
-    const modules = Object.values(ProjectModule);
+    const currentActiveView = activeView === View.Projects ? View.ProjectsIssues : activeView;
 
     const handleIssueCreated = (newIssueData: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>) => {
         onCreateIssue(newIssueData);
-        setShowNewIssueForm(false);
+        setActiveView(View.ProjectsIssues);
     };
 
     const renderModuleContent = () => {
@@ -1207,23 +1218,31 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ isAdmin, issues, onCreateIs
             </div>
         );
 
-        switch (activeModule) {
-            case ProjectModule.Overview:
+        switch (currentActiveView) {
+            case View.ProjectsOverview:
                 return <ModuleCard title="نمای کلی پروژه">اینجا داشبورد و اطلاعات کلی پروژه نمایش داده می شود.</ModuleCard>;
-            case ProjectModule.Timeline:
+            case View.ProjectsTimeline:
                 return <TimelinePage />;
-            case ProjectModule.Issues:
-                return showNewIssueForm 
-                    ? <NewIssuePage onCreateIssue={handleIssueCreated} onCancel={() => setShowNewIssueForm(false)} /> 
-                    : <IssuesListPage issues={issues} onNewIssueClick={() => setShowNewIssueForm(true)} />;
-             case ProjectModule.Assets:
+            case View.ProjectsIssues:
+                return <IssuesListPage issues={issues} onNewIssueClick={() => setActiveView(View.ProjectsNewIssue)} />;
+            case View.ProjectsNewIssue:
+                return <NewIssuePage onCreateIssue={handleIssueCreated} onCancel={() => setActiveView(View.ProjectsIssues)} /> 
+             case View.ProjectsAssets:
                 return <AssetsPage />;
-            case ProjectModule.Calendar:
+            case View.ProjectsCalendar:
                 return <CalendarPage />;
             default:
-                return <ModuleCard title={activeModule}>محتوای صفحه "{activeModule}" در اینجا قرار خواهد گرفت.</ModuleCard>;
+                 const module = modules.find(m => m.id === currentActiveView);
+                 const title = module ? module.label : '';
+                return <ModuleCard title={title}>محتوای صفحه "{title}" در اینجا قرار خواهد گرفت.</ModuleCard>;
         }
     };
+    
+    const getBaseView = (view: View) => {
+        if (view === View.ProjectsNewIssue) return View.ProjectsIssues;
+        return view;
+    };
+    const baseActiveView = getBaseView(currentActiveView);
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -1231,15 +1250,15 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ isAdmin, issues, onCreateIs
                  <nav className="flex items-baseline space-x-2 space-x-reverse">
                      {modules.map(module => (
                          <button
-                           key={module}
-                           onClick={() => setActiveModule(module)}
+                           key={module.id}
+                           onClick={() => setActiveView(module.id)}
                            className={`px-4 py-2 text-sm font-semibold transition-colors duration-200 ease-in-out rounded-md ${
-                                activeModule === module
+                                baseActiveView === module.id
                                 ? 'text-red-600 border-b-2 border-red-600'
                                 : 'text-gray-600 hover:bg-gray-300/50'
                             }`}
                          >
-                           {module}
+                           {module.label}
                          </button>
                      ))}
                  </nav>
@@ -1256,15 +1275,20 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ isAdmin, issues, onCreateIs
 };
 
 
-export const MainContent: React.FC<MainContentProps> = ({ activeView, isAdmin, issues, onCreateIssue }) => {
+export const MainContent: React.FC<MainContentProps> = ({ activeView, setActiveView, isAdmin, issues, onCreateIssue }) => {
   const renderContent = () => {
+    if (activeView.startsWith('پروژه')) {
+        return <ProjectsPage activeView={activeView} setActiveView={setActiveView} isAdmin={isAdmin} issues={issues} onCreateIssue={onCreateIssue} />;
+    }
+    if (activeView.startsWith('راه بری')) {
+        return <ManagementPage activeView={activeView} setActiveView={setActiveView} />;
+    }
+      
     switch (activeView) {
       case View.HomePage:
         return <HomePage />;
       case View.MyPage:
         return <MyPage />;
-      case View.Projects:
-        return <ProjectsPage isAdmin={isAdmin} issues={issues} onCreateIssue={onCreateIssue} />;
       case View.Help:
         return (
           <div className="transform hover:scale-105 transition-transform duration-300 animate-fade-in">
@@ -1273,8 +1297,6 @@ export const MainContent: React.FC<MainContentProps> = ({ activeView, isAdmin, i
             </ContentCard>
           </div>
         );
-      case View.Management:
-        return <ManagementPage />;
       default:
         return null;
     }
