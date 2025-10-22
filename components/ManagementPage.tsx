@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { NewUserPage } from './NewUserPage';
+import { UsersListPage } from './UsersListPage';
 
 // --- Icons ---
 const ProjectsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
@@ -44,8 +46,8 @@ const adminCards = [
     { title: 'تمدید و خرید امکانات', icon: <RenewIcon /> },
 ];
 
-const AdminCard: React.FC<{ title: string; icon: React.ReactNode }> = ({ title, icon }) => (
-    <button className="group flex flex-col items-center justify-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+const AdminCard: React.FC<{ title: string; icon: React.ReactNode; onClick?: () => void; }> = ({ title, icon, onClick }) => (
+    <button onClick={onClick} className="group flex flex-col items-center justify-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
         <div className="text-gray-500 group-hover:text-indigo-600 transition-colors duration-300">
             {icon}
         </div>
@@ -55,6 +57,23 @@ const AdminCard: React.FC<{ title: string; icon: React.ReactNode }> = ({ title, 
 
 
 export const ManagementPage = () => {
+    const [activeView, setActiveView] = useState<'main' | 'userList' | 'newUser'>('main');
+
+    if (activeView === 'newUser') {
+        return <NewUserPage onBack={() => setActiveView('userList')} />;
+    }
+
+    if (activeView === 'userList') {
+        return <UsersListPage onNewUser={() => setActiveView('newUser')} />;
+    }
+
+    const cardsWithActions = adminCards.map(card => {
+        if (card.title === 'کاربران') {
+            return { ...card, onClick: () => setActiveView('userList') };
+        }
+        return { ...card, onClick: () => {} }; // Default empty onClick
+    });
+
     return (
         <div className="space-y-6 animate-fade-in">
             <header className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
@@ -76,8 +95,8 @@ export const ManagementPage = () => {
 
             <main>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-                    {adminCards.map(card => (
-                        <AdminCard key={card.title} title={card.title} icon={card.icon} />
+                    {cardsWithActions.map(card => (
+                        <AdminCard key={card.title} title={card.title} icon={card.icon} onClick={card.onClick} />
                     ))}
                 </div>
             </main>

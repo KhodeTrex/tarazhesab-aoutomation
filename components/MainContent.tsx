@@ -44,6 +44,14 @@ const ContentCard: React.FC<{ icon: React.ReactNode; title: string; children: Re
 
 // --- کامپوننت ها برای هر صفحه ---
 
+const HomePage = () => (
+    <div className="transform hover:scale-105 transition-transform duration-300 animate-fade-in">
+      <ContentCard icon={<HomeIcon />} title="به سیستم مدیریت پروژه خوش آمدید">
+        برای شروع، از منوی بالا یک گزینه را انتخاب کنید.
+      </ContentCard>
+    </div>
+  );
+
 const MyPage = () => {
     const shortcuts = [ { title: 'ایجاد پروژه جدید', icon: <PlusCircleIcon /> }, { title: 'مشاهده تیم من', icon: <UsersIcon /> }, { title: 'گزارش ها', icon: <ChartBarIcon /> }, { title: 'تنظیمات حساب', icon: <CogIcon /> }, ];
     const tasks = [ { id: 1, title: 'طراحی صفحه ورود', project: 'وبسایت جدید', dueDate: '1403/05/10', status: 'در حال انجام' }, { id: 2, title: 'آماده سازی ارائه', project: 'کمپین بازاریابی', dueDate: '1403/05/05', status: 'انجام شده' }, { id: 3, title: 'رفع باگ های ماژول پرداخت', project: 'اپلیکیشن موبایل', dueDate: '1403/05/01', status: 'معوق' }, ];
@@ -1251,6 +1259,8 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ isAdmin, issues, onCreateIs
 export const MainContent: React.FC<MainContentProps> = ({ activeView, isAdmin, issues, onCreateIssue }) => {
   const renderContent = () => {
     switch (activeView) {
+      case View.HomePage:
+        return <HomePage />;
       case View.MyPage:
         return <MyPage />;
       case View.Projects:

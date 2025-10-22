@@ -1,4 +1,5 @@
 export enum View {
+  HomePage = 'صفحه اصلی',
   MyPage = 'صفحه من',
   Projects = 'پروژه ها',
   Help = 'راهنما',

@@ -10,6 +10,7 @@ interface HeaderProps {
 }
 
 const baseNavItems = [
+  { id: View.HomePage, label: 'صفحه اصلی' },
   { id: View.MyPage, label: 'صفحه من' },
   { id: View.Projects, label: 'پروژه ها' },
   { id: View.Help, label: 'راهنما' },
@@ -33,8 +34,16 @@ const ChevronDownIcon = ({className = "h-5 w-5 text-white"}) => (<svg xmlns="htt
 
 
 export const Header: React.FC<HeaderProps> = ({ activeView, setActiveView, isAdmin, username, onLogout }) => {
-  const navItems = isAdmin ? [...baseNavItems, adminNavItem] : baseNavItems;
-  
+  const navItems = [...baseNavItems];
+  if (isAdmin) {
+      const homeIndex = navItems.findIndex(item => item.id === View.HomePage);
+      if (homeIndex !== -1) {
+          navItems.splice(homeIndex + 1, 0, adminNavItem);
+      } else {
+          navItems.unshift(adminNavItem); // Fallback
+      }
+  }
+
   return (
     <header style={{backgroundColor: '#4a428d'}} className="text-white shadow-lg sticky top-0 z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,16 +64,36 @@ export const Header: React.FC<HeaderProps> = ({ activeView, setActiveView, isAdm
           </div>
 
           {/* Right side in RTL */}
-           <div className="flex items-center gap-4">
-                <div className="relative">
-                    <select className="bg-[#5f599d] border border-transparent rounded-md py-2 pl-8 pr-3 appearance-none focus:outline-none text-white text-sm">
-                        <option>انتخاب پروژه</option>
-                    </select>
-                    <div className="absolute right-2 top-2.5 pointer-events-none"><ChevronDownIcon /></div>
-                </div>
-                <div className="relative">
-                    <input type="text" placeholder="جستجو..." className="bg-[#5f599d] w-40 sm:w-64 rounded-full py-1.5 px-4 text-sm placeholder-gray-300 focus:outline-none" />
-                    <div className="absolute left-3 top-2 pointer-events-none"><SearchIcon /></div>
+           <div className="flex items-center gap-x-6">
+                <nav>
+                    <ul className="flex items-center space-x-1 space-x-reverse">
+                        {navItems.map(item => (
+                        <li key={item.id}>
+                            <button 
+                            onClick={() => setActiveView(item.id)}
+                            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                                activeView === item.id 
+                                ? 'bg-white/20 text-white' 
+                                : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                            }`}
+                            >
+                            {item.label}
+                            </button>
+                        </li>
+                        ))}
+                    </ul>
+                </nav>
+                <div className="flex items-center gap-4">
+                    <div className="relative">
+                        <select className="bg-[#5f599d] border border-transparent rounded-md py-2 pl-8 pr-3 appearance-none focus:outline-none text-white text-sm">
+                            <option>انتخاب پروژه</option>
+                        </select>
+                        <div className="absolute right-2 top-2.5 pointer-events-none"><ChevronDownIcon /></div>
+                    </div>
+                    <div className="relative">
+                        <input type="text" placeholder="جستجو..." className="bg-[#5f599d] w-40 sm:w-64 rounded-full py-1.5 px-4 text-sm placeholder-gray-300 focus:outline-none" />
+                        <div className="absolute left-3 top-2 pointer-events-none"><SearchIcon /></div>
+                    </div>
                 </div>
             </div>
         </div>

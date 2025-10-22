@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { MainContent } from './components/MainContent';
@@ -7,7 +6,7 @@ import { View, Issue } from './types';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [activeView, setActiveView] = useState<View>(View.Projects);
+  const [activeView, setActiveView] = useState<View>(View.HomePage);
   const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState('');
   
@@ -48,6 +47,7 @@ function App() {
     setIsLoggedIn(false);
     setIsAdmin(false);
     setUsername('');
+    setActiveView(View.HomePage);
   };
 
   if (!isLoggedIn) {
