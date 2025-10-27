@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { User } from '../types';
 
 // Icons
 const CalendarIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
@@ -6,10 +7,65 @@ const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-
 
 interface NewUserPageProps {
   onBack: () => void;
+  onCreateUser: (user: Omit<User, 'id' | 'createdAt' | 'lastLogin'>) => void;
 }
 
-export const NewUserPage: React.FC<NewUserPageProps> = ({ onBack }) => {
-  // State for form data could be added here
+export const NewUserPage: React.FC<NewUserPageProps> = ({ onBack, onCreateUser }) => {
+  const [formData, setFormData] = useState({
+    username: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '09168082580',
+    position: '',
+    isAdmin: false,
+    password: '',
+    passwordConfirmation: '',
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value, type } = e.target;
+    if (type === 'checkbox') {
+      const { checked } = e.target as HTMLInputElement;
+      setFormData(prev => ({ ...prev, [id]: checked }));
+    } else {
+      setFormData(prev => ({ ...prev, [id]: value }));
+    }
+  };
+
+  const handleCreate = (continueAfter: boolean) => {
+    if (!formData.username || !formData.firstName || !formData.lastName || !formData.email || !formData.position) {
+      alert('لطفا فیلدهای الزامی (نام کاربری، نام کوچک، نام خانوادگی، رایانامه، سمت) را پر کنید.');
+      return;
+    }
+    if (!formData.password || formData.password.length < 8) {
+        alert('لطفا گذرواژه را با حداقل ۸ کاراکتر وارد کنید.');
+        return;
+    }
+    if (formData.password !== formData.passwordConfirmation) {
+        alert('گذرواژه و تکرار آن مطابقت ندارند.');
+        return;
+    }
+
+    const { password, passwordConfirmation, ...userDataForCreation } = formData;
+    onCreateUser(userDataForCreation);
+
+    if (continueAfter) {
+      setFormData({
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '09168082580',
+        position: '',
+        isAdmin: false,
+        password: '',
+        passwordConfirmation: '',
+      });
+    } else {
+      onBack();
+    }
+  };
   
   const LabeledInput: React.FC<{label: string, id: string, required?: boolean, children: React.ReactNode, className?: string, labelClassName?: string}> = ({label, id, required, children, className, labelClassName}) => (
     <div className={`flex flex-row-reverse items-center ${className}`}>
@@ -45,19 +101,19 @@ export const NewUserPage: React.FC<NewUserPageProps> = ({ onBack }) => {
             <h3 className="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">اطلاعات</h3>
             <div className="space-y-4 pt-4">
                 <LabeledInput label="نام کاربری" id="username" required labelClassName="w-32">
-                    <input type="text" id="username" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                    <input type="text" id="username" value={formData.username} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                 </LabeledInput>
                  <LabeledInput label="نام کوچک" id="firstName" required labelClassName="w-32">
-                    <input type="text" id="firstName" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                    <input type="text" id="firstName" value={formData.firstName} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                 </LabeledInput>
                 <LabeledInput label="نام خانوادگی" id="lastName" required labelClassName="w-32">
-                    <input type="text" id="lastName" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                    <input type="text" id="lastName" value={formData.lastName} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                 </LabeledInput>
                 <LabeledInput label="رایانامه" id="email" required labelClassName="w-32">
-                    <input type="email" id="email" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                    <input type="email" id="email" value={formData.email} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                 </LabeledInput>
                 <LabeledInput label="شماره تلفن" id="phone" labelClassName="w-32">
-                    <input type="text" id="phone" defaultValue="09168082580" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                    <input type="text" id="phone" value={formData.phone} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                 </LabeledInput>
                  <LabeledInput label="شرح وظایف" id="jobDescription" labelClassName="w-32">
                     <div className="flex items-center gap-2">
@@ -85,7 +141,7 @@ export const NewUserPage: React.FC<NewUserPageProps> = ({ onBack }) => {
                     <input type="text" id="internalPhone" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                 </LabeledInput>
                 <LabeledInput label="سمت" id="position" required labelClassName="w-32">
-                     <select id="position" className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"><option>--- انتخاب کنید ---</option></select>
+                     <select id="position" value={formData.position} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"><option value="">--- انتخاب کنید ---</option><option value="کاربر">کاربر</option><option value="مدیر">مدیر</option></select>
                 </LabeledInput>
                 <LabeledInput label="تاریخ تولد" id="birthDate" labelClassName="w-32">
                      <div className="relative w-full">
@@ -94,7 +150,7 @@ export const NewUserPage: React.FC<NewUserPageProps> = ({ onBack }) => {
                     </div>
                 </LabeledInput>
                 <LabeledInput label="راهبر" id="isAdmin" labelClassName="w-32">
-                    <input id="isAdmin" type="checkbox" className="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500" />
+                    <input id="isAdmin" type="checkbox" checked={formData.isAdmin} onChange={handleInputChange} className="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500" />
                 </LabeledInput>
             </div>
           </div>
@@ -102,11 +158,11 @@ export const NewUserPage: React.FC<NewUserPageProps> = ({ onBack }) => {
             <h3 className="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">احراز هویت</h3>
             <div className="space-y-4 pt-4">
                  <LabeledInput label="گذرواژه" id="password" required labelClassName="w-32">
-                    <input type="password" id="password" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                    <input type="password" id="password" value={formData.password} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                 </LabeledInput>
                 <p className="text-xs text-gray-500" style={{paddingRight: '8.5rem'}}>کمترین اندازه ۸ است</p>
                  <LabeledInput label="تکرار گذرواژه" id="passwordConfirmation" required labelClassName="w-32">
-                    <input type="password" id="passwordConfirmation" className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
+                    <input type="password" id="passwordConfirmation" value={formData.passwordConfirmation} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                 </LabeledInput>
                  <div className="flex justify-start gap-6" style={{paddingRight: '8.5rem'}}>
                      <div className="flex items-center">
@@ -192,10 +248,10 @@ export const NewUserPage: React.FC<NewUserPageProps> = ({ onBack }) => {
       
       <div className="mt-8 flex justify-between items-center">
         <div className="flex items-center gap-2">
-            <button type="button" className="px-6 py-2 bg-sky-600 text-white font-semibold rounded-md hover:bg-sky-700 transition-colors">
+            <button onClick={() => handleCreate(false)} type="button" className="px-6 py-2 bg-sky-600 text-white font-semibold rounded-md hover:bg-sky-700 transition-colors">
                 ساخت
             </button>
-             <button type="button" className="px-6 py-2 bg-sky-600 text-white font-semibold rounded-md hover:bg-sky-700 transition-colors">
+             <button onClick={() => handleCreate(true)} type="button" className="px-6 py-2 bg-sky-600 text-white font-semibold rounded-md hover:bg-sky-700 transition-colors">
                 ساخت و ادامه
             </button>
         </div>

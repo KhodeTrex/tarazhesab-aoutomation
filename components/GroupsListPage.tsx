@@ -1,4 +1,5 @@
 import React from 'react';
+import { Group } from '../types';
 
 // Icons
 const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>;
@@ -7,20 +8,14 @@ const SortIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-
 const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
 const PencilIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg>;
 
-
-const groups = [
-    { id: 1, name: 'گروه تست ۱', users: 5, createdAt: '۱۴۰۴-۰۷-۲۰' },
-    { id: 2, name: 'تیم توسعه', users: 12, createdAt: '۱۴۰۴-۰۷-۱۵' },
-    { id: 3, name: 'مدیریت', users: 3, createdAt: '۱۴۰۴-۰۷-۱۰' },
-    { id: 4, name: 'کارشناسان مالی', users: 8, createdAt: '۱۴۰۴-۰۶-۳۰' },
-];
-
 interface GroupsListPageProps {
     onNewGroup: () => void;
     onBack: () => void;
+    groups: Group[];
+    onViewGroup: (group: Group) => void;
 }
 
-export const GroupsListPage: React.FC<GroupsListPageProps> = ({ onNewGroup, onBack }) => {
+export const GroupsListPage: React.FC<GroupsListPageProps> = ({ onNewGroup, onBack, groups, onViewGroup }) => {
 
     return (
         <div className="bg-white rounded-lg shadow-md animate-fade-in-fast">
@@ -64,10 +59,12 @@ export const GroupsListPage: React.FC<GroupsListPageProps> = ({ onNewGroup, onBa
                     <tbody className="divide-y divide-gray-200">
                         {groups.map((group) => (
                              <tr key={group.id} className="hover:bg-gray-50">
-                                <td className="p-3 text-sky-600 hover:underline cursor-pointer">
-                                    {group.name}
+                                <td className="p-3">
+                                    <button onClick={() => onViewGroup(group)} className="text-sky-600 hover:underline">
+                                        {group.name}
+                                    </button>
                                 </td>
-                                <td className="p-3 text-center">{group.users}</td>
+                                <td className="p-3 text-center">{group.userIds.length}</td>
                                 <td className="p-3 text-gray-500">{group.createdAt}</td>
                                  <td className="p-3">
                                     <div className="flex items-center justify-end gap-3 text-xs text-gray-500">

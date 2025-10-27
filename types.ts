@@ -10,8 +10,14 @@ export enum View {
   ManagementNewUser = 'راه بری/کاربر جدید',
   ManagementGroups = 'راه بری/گروه ها',
   ManagementNewGroup = 'راه بری/گروه جدید',
+  ManagementGroupDetails = 'راه بری/گروه ها/جزئیات',
+  ManagementRoles = 'راه بری/نقش ها و دسترسی ها',
+  ManagementNewRole = 'راه بری/نقش جدید',
+  ManagementEditRole = 'راه بری/ویرایش نقش',
+  ManagementSettings = 'راه بری/تنظیمات',
   
   // Projects sub-views
+  ProjectsNew = 'پروژه ها/پروژه جدید',
   ProjectsOverview = 'پروژه ها/پروژه',
   ProjectsTimeline = 'پروژه ها/خط زمان',
   ProjectsIssues = 'پروژه ها/مسئله ها',
@@ -37,4 +43,38 @@ export interface Issue {
   createdAt: string;
   updatedAt: string;
   [key: string]: any; 
+}
+
+export interface User {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  isAdmin: boolean;
+  createdAt: string;
+  lastLogin: string;
+  phone?: string;
+  position?: string;
+}
+
+export interface Group {
+  id: number;
+  name: string;
+  userIds: number[];
+  createdAt: string;
+}
+
+export interface Role {
+  id: number;
+  name: string;
+}
+
+export interface Project {
+  id: number;
+  name: string;
+  description: string;
+  identifier: string;
+  isPublic: boolean;
+  createdAt: string;
 }

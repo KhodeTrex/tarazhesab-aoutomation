@@ -1,9 +1,14 @@
-import React from 'react';
-import { View } from '../types';
+import React, { useState } from 'react';
+import { View, Group, Role, User } from '../types';
 import { NewUserPage } from './NewUserPage';
 import { UsersListPage } from './UsersListPage';
 import { GroupsListPage } from './GroupsListPage';
 import { NewGroupPage } from './NewGroupPage';
+import { RolesListPage } from './RolesListPage';
+import { NewRolePage } from './NewRolePage';
+import { EditRolePage } from './EditRolePage';
+import { SettingsPage } from './SettingsPage';
+import { GroupDetailsPage } from './GroupDetailsPage';
 
 // --- Icons ---
 const ProjectsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
@@ -13,7 +18,7 @@ const RolesIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 
 const WorkflowIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m-15.357-2a8.001 8.001 0 0115.357-2m0 0H15" /></svg>;
 const CustomFieldsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>;
 const EnumerationsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>;
-const SettingsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0 3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
+const SettingsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066 2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
 const LdapIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" /></svg>;
 const BackupIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>;
 const AssetWorkflowIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m-15.357-2a8.001 8.001 0 0115.357-2m0 0H15" /></svg>;
@@ -61,32 +66,89 @@ const AdminCard: React.FC<{ title: string; icon: React.ReactNode; onClick?: () =
 interface ManagementPageProps {
     activeView: View;
     setActiveView: (view: View) => void;
+    users: User[];
+    onCreateUser: (user: Omit<User, 'id' | 'createdAt' | 'lastLogin'>) => void;
+    groups: Group[];
+    onCreateGroup: (groupName: string) => void;
+    onUpdateGroup: (group: Group) => void;
+    roles: Role[];
+    onCreateRole: (roleName: string) => void;
 }
 
-export const ManagementPage: React.FC<ManagementPageProps> = ({ activeView, setActiveView }) => {
+export const ManagementPage: React.FC<ManagementPageProps> = ({ activeView, setActiveView, users, onCreateUser, groups, onCreateGroup, onUpdateGroup, roles, onCreateRole }) => {
+    const [roleToEdit, setRoleToEdit] = useState<Role | null>(null);
+    const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
+
+    const handleEditRole = (role: Role) => {
+        setRoleToEdit(role);
+        setActiveView(View.ManagementEditRole);
+    };
+    
+    const handleViewGroup = (group: Group) => {
+        setSelectedGroup(group);
+        setActiveView(View.ManagementGroupDetails);
+    };
+
 
     if (activeView === View.ManagementNewUser) {
-        return <NewUserPage onBack={() => setActiveView(View.ManagementUsers)} />;
+        return <NewUserPage onBack={() => setActiveView(View.ManagementUsers)} onCreateUser={onCreateUser} />;
     }
 
     if (activeView === View.ManagementUsers) {
-        return <UsersListPage onNewUser={() => setActiveView(View.ManagementNewUser)} />;
+        return <UsersListPage onNewUser={() => setActiveView(View.ManagementNewUser)} users={users} />;
     }
 
     if (activeView === View.ManagementNewGroup) {
-        return <NewGroupPage onBack={() => setActiveView(View.ManagementGroups)} />;
+        return <NewGroupPage onBack={() => setActiveView(View.ManagementGroups)} onCreateGroup={onCreateGroup} />;
     }
 
     if (activeView === View.ManagementGroups) {
-        return <GroupsListPage onNewGroup={() => setActiveView(View.ManagementNewGroup)} onBack={() => setActiveView(View.Management)} />;
+        return <GroupsListPage onNewGroup={() => setActiveView(View.ManagementNewGroup)} onBack={() => setActiveView(View.Management)} groups={groups} onViewGroup={handleViewGroup} />;
+    }
+    
+    if (activeView === View.ManagementGroupDetails && selectedGroup) {
+        return <GroupDetailsPage 
+            group={selectedGroup}
+            allUsers={users}
+            onUpdateGroup={(updatedGroup) => {
+                onUpdateGroup(updatedGroup);
+                setSelectedGroup(updatedGroup); // Update local state to reflect changes immediately
+            }}
+            onBack={() => setActiveView(View.ManagementGroups)}
+        />
+    }
+
+    if (activeView === View.ManagementNewRole) {
+        return <NewRolePage onBack={() => setActiveView(View.ManagementRoles)} onCreateRole={onCreateRole} />;
+    }
+
+    if (activeView === View.ManagementEditRole && roleToEdit) {
+        return <EditRolePage role={roleToEdit} onBack={() => setActiveView(View.ManagementRoles)} />;
+    }
+
+    if (activeView === View.ManagementRoles) {
+        return <RolesListPage roles={roles} onNewRole={() => setActiveView(View.ManagementNewRole)} onBack={() => setActiveView(View.Management)} onEditRole={handleEditRole} />;
+    }
+    
+    if (activeView === View.ManagementSettings) {
+        return <SettingsPage onBack={() => setActiveView(View.Management)} />;
     }
 
     const cardsWithActions = adminCards.map(card => {
+        if (card.title === 'پروژه ها') {
+            return { ...card, onClick: () => setActiveView(View.Projects) };
+        }
         if (card.title === 'کاربران') {
             return { ...card, onClick: () => setActiveView(View.ManagementUsers) };
         }
         if (card.title === 'گروه ها') {
             return { ...card, onClick: () => setActiveView(View.ManagementGroups) };
+        }
+        if (card.title === 'نقش ها و دسترسی ها') {
+            return { ...card, onClick: () => setActiveView(View.ManagementRoles) };
+        }
+        if (card.title === 'تنظیمات') {
+            return { ...card, onClick: () => setActiveView(View.ManagementSettings) };
         }
         return { ...card, onClick: () => {} }; // Default empty onClick
     });

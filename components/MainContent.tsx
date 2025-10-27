@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { View, Issue } from '../types';
+import { View, Issue, Group, Role, User, Project } from '../types';
 import { TimelinePage } from './TimelinePage';
 import { CalendarPage } from './CalendarPage';
 import { ManagementPage } from './ManagementPage';
+import { GanttPage } from './GanttPage';
+import { ProjectsDashboard } from './ProjectsDashboard';
+import { NewProjectPage } from './NewProjectPage';
 
 // --- آیکون ها ---
 const HomeIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}> <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /> </svg> );
 const HelpIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}> <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /> </svg> );
-const PlusCircleIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-slate-500 group-hover:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}> <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /> </svg> );
+const PlusCircleIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}> <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /> </svg> );
 const UsersIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-slate-500 group-hover:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}> <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197m0 0A5.995 5.995 0 003 21m12 0v1m0-1v-1m0 0v-1m0 0v-1" /> </svg> );
 const ChartBarIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-slate-500 group-hover:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}> <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /> </svg> );
-const CogIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-slate-500 group-hover:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}> <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> </svg> );
+const CogIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-slate-500 group-hover:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}> <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066 2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> </svg> );
 const RocketIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>);
 const SearchIcon = ({className = "h-5 w-5 text-gray-400"}) => (<svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>);
 const ChevronDownIcon = ({className = "h-5 w-5 text-gray-500"}) => (<svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>);
@@ -31,6 +34,15 @@ interface MainContentProps {
   isAdmin: boolean;
   issues: Issue[];
   onCreateIssue: (issue: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  users: User[];
+  onCreateUser: (user: Omit<User, 'id' | 'createdAt' | 'lastLogin'>) => void;
+  groups: Group[];
+  onCreateGroup: (groupName: string) => void;
+  onUpdateGroup: (group: Group) => void;
+  roles: Role[];
+  onCreateRole: (roleName: string) => void;
+  projects: Project[];
+  onCreateProject: (project: Omit<Project, 'id' | 'createdAt'>) => void;
 }
 
 const ContentCard: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
@@ -43,7 +55,7 @@ const ContentCard: React.FC<{ icon: React.ReactNode; title: string; children: Re
     </div>
 );
 
-// --- کامپوننت ها برای هر صفحه ---
+// --- کامپونнент ها برای هر صفحه ---
 
 const HomePage = () => (
     <div className="transform hover:scale-105 transition-transform duration-300 animate-fade-in">
@@ -65,6 +77,61 @@ const MyPage = () => {
         </div>
     );
 }
+
+const HelpPage = () => (
+    <div className="transform hover:scale-105 transition-transform duration-300 animate-fade-in">
+      <ContentCard icon={<HelpIcon />} title="راهنما">
+        اینجا می‌توانید راهنمایی‌های مربوط به سیستم را پیدا کنید.
+      </ContentCard>
+    </div>
+);
+
+interface ProjectsPageProps {
+    issues: Issue[];
+    setActiveView: (view: View) => void;
+}
+const ProjectsPage: React.FC<ProjectsPageProps> = ({ issues, setActiveView }) => {
+    return (
+        <div className="bg-white rounded-lg shadow-md animate-fade-in-fast">
+            <div className="p-4 border-b flex justify-between items-center">
+                <h2 className="text-xl font-bold text-gray-800">مسئله‌ها</h2>
+                <button 
+                    onClick={() => setActiveView(View.ProjectsNewIssue)} 
+                    className="flex items-center gap-1 px-4 py-2 bg-sky-600 text-white font-semibold rounded-md hover:bg-sky-700 transition-colors text-sm"
+                >
+                    <PlusCircleIcon />
+                    <span>مسئله جدید</span>
+                </button>
+            </div>
+            <div className="overflow-x-auto">
+                <table className="min-w-full text-sm text-right">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th className="p-3 font-semibold text-gray-600">#</th>
+                            <th className="p-3 font-semibold text-gray-600">پروژه</th>
+                            <th className="p-3 font-semibold text-gray-600">موضوع</th>
+                            <th className="p-3 font-semibold text-gray-600">وضعیت</th>
+                            <th className="p-3 font-semibold text-gray-600">مسئول</th>
+                            <th className="p-3 font-semibold text-gray-600">بروزرسانی شده در</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                        {issues.map(issue => (
+                            <tr key={issue.id} className="hover:bg-gray-50">
+                                <td className="p-3 text-gray-500">{issue.id}</td>
+                                <td className="p-3">{issue.project}</td>
+                                <td className="p-3 text-sky-600 hover:underline cursor-pointer">{issue.subject}</td>
+                                <td className="p-3">{issue.status}</td>
+                                <td className="p-3">{issue.assignee || '---'}</td>
+                                <td className="p-3 text-gray-500">{issue.updatedAt}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
 
 interface NewIssuePageProps {
     onCreateIssue: (issue: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -365,946 +432,101 @@ const NewIssuePage: React.FC<NewIssuePageProps> = ({ onCreateIssue, onCancel }) 
                                     <LabeledInput label="بخشودگی" id="clemency-tax">
                                         <select id="clemency-tax" value={formData['clemency-tax'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"><option>---</option></select>
                                     </LabeledInput>
-                                    <LabeledInput label="کد واحد مالیاتی" id="tax-unit-code-tax">
-                                        <select id="tax-unit-code-tax" value={formData['tax-unit-code-tax'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"><option>---</option></select>
-                                    </LabeledInput>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
-                                 <div className="flex flex-row-reverse">
-                                    <label htmlFor="description" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">توضیح</label>
-                                    <textarea id="description" value={formData.description} onChange={handleInputChange} rows={6} className="block w-full border border-gray-300 rounded-md focus:ring-sky-500 focus:border-sky-500 sm:text-sm p-3"></textarea>
-                                </div>
-                                 <div className="flex flex-row-reverse">
-                                    <label htmlFor="management-note-tax" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">رونوشت مدیریت</label>
-                                    <textarea id="management-note-tax" value={formData['management-note-tax'] || ''} onChange={handleInputChange} rows={6} className="block w-full border border-gray-300 rounded-md focus:ring-sky-500 focus:border-sky-500 sm:text-sm p-3"></textarea>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4 border-t pt-6 mt-6">
-                                <LabeledInput label="تاریخ رسیدگی" id="review-date-tax">
-                                    <div className="relative w-full"><input id="review-date-tax" type="text" value={formData['review-date-tax'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/><div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div></div>
-                                </LabeledInput>
-                                <LabeledInput label="ممیز پرونده" id="auditor-tax">
-                                    <select id="auditor-tax" value={formData['auditor-tax'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"><option>---</option></select>
-                                </LabeledInput>
-                                <LabeledInput label="سرممیز پرونده" id="head-auditor-tax">
-                                     <input type="text" id="head-auditor-tax" value={formData['head-auditor-tax'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                </LabeledInput>
-                                 <LabeledInput label="تاریخ انجام" id="completion-date-tax">
-                                    <div className="relative w-full"><input id="completion-date-tax" type="text" value={formData['completion-date-tax'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/><div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div></div>
-                                </LabeledInput>
-                                <LabeledInput label="رونوشت معاونت" id="vp-note-tax">
-                                    <select id="vp-note-tax" value={formData['vp-note-tax'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"><option>---</option></select>
-                                </LabeledInput>
-                            </div>
-                         </div>
-                    ) : selectedIssueType === 'درخواست خدمات' ? (
-                         <div className="space-y-6">
-                            <div>
-                                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">موضوع</label>
-                                <input type="text" id="subject" value={formData.subject} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
-                            </div>
-
-                            <div>
-                                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
-                                <div className="border border-gray-300 rounded-md">
-                                    <EditorToolbar />
-                                    <textarea id="description" value={formData.description} onChange={handleInputChange} rows={8} className="block w-full border-0 rounded-b-md focus:ring-0 sm:text-sm p-3"></textarea>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pt-6 mt-6 border-t border-gray-200">
-                                {/* Right Column in UI */}
-                                <div className="space-y-4">
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="startDate" className="w-32 text-sm font-medium text-gray-700 text-left shrink-0">تاریخ آغاز</label>
-                                        <div className="relative w-full">
-                                            <input id="startDate" type="text" value={formData.startDate || '۱۴۰۴-۰۷-۲۸'} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm" />
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="dueDate" className="w-32 text-sm font-medium text-gray-700 text-left shrink-0">تاریخ سررسید</label>
-                                        <div className="relative w-full">
-                                            <input id="dueDate" type="text" value={formData.dueDate || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="estimated-time-s" className="w-32 text-sm font-medium text-gray-700 text-left shrink-0">زمان برآورد شده</label>
-                                        <div className="flex items-center w-full">
-                                            <input id="estimated-time-s" type="text" value={formData['estimated-time-s'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                            <span className="mr-2 text-sm text-gray-500">ساعت</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="done-ratio-s" className="w-32 text-sm font-medium text-gray-700 text-left shrink-0">انجام شده %</label>
-                                        <select id="done-ratio-s" value={formData['done-ratio-s'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                             {['0 %', '10 %', '20 %', '30 %', '40 %', '50 %', '60 %', '70 %', '80 %', '90 %', '100 %'].map(p => <option key={p}>{p}</option>)}
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-row-reverse">
-                                        <label htmlFor="financial-note-s" className="w-32 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">رونوشت مالی</label>
-                                        <textarea id="financial-note-s" value={formData['financial-note-s'] || ''} onChange={handleInputChange} rows={3} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
-                                    </div>
-                                     <div className="flex flex-row-reverse">
-                                        <label className="w-32 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">لیست خدمات</label>
-                                        <div className="w-full space-y-2 text-sm">
-                                            {['ارسال لیست حقوق', 'تنظیم فیش حقوق', 'ارسال لیست بیمه'].map(item => (
-                                                <div key={item} className="flex items-center">
-                                                    <input id={`checkbox-${item}`} name="serviceList" type="checkbox" className="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500" />
-                                                    <label htmlFor={`checkbox-${item}`} className="mr-2 text-gray-700">{item}</label>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                                 {/* Left Column in UI */}
-                                <div className="space-y-4">
-                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="status" className="w-24 text-sm font-medium text-gray-700 text-left shrink-0">وضعیت</label>
-                                        <select id="status" value={formData.status} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md sm:text-sm">
-                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="priority" className="w-24 text-sm font-medium text-gray-700 text-left shrink-0">اولویت</label>
-                                        <select id="priority" value={formData.priority} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md sm:text-sm">
-                                             {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="assignee" className="w-24 text-sm font-medium text-gray-700 text-left shrink-0">مسئول</label>
-                                        <div className="relative w-full">
-                                            <select id="assignee" value={formData.assignee} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md sm:text-sm">
-                                                <option>---</option>
-                                                {users.map(user => <option key={user}>{user}</option>)}
-                                            </select>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="year-s" className="w-24 text-sm font-medium text-gray-700 text-left shrink-0">سال</label>
-                                        <select id="year-s" value={formData['year-s'] || '1404'} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md sm:text-sm">
-                                           <option>1404</option><option>1403</option><option>1402</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 pt-4">
-                                <div className="flex flex-row-reverse">
-                                    <label htmlFor="description-simple-s" className="w-32 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">توضیح</label>
-                                    <textarea id="description-simple-s" value={formData['description-simple-s'] || ''} onChange={handleInputChange} rows={6} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
-                                </div>
-                                <div className="flex flex-row-reverse">
-                                    <label htmlFor="management-note-s" className="w-24 text-sm font-medium text-gray-700 text-left shrink-0 pt-2">رونوشت مدیریت</label>
-                                    <textarea id="management-note-s" value={formData['management-note-s'] || ''} onChange={handleInputChange} rows={6} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
-                                </div>
-                            </div>
-                         </div>
-                     ) : selectedIssueType === 'تحویل مدارک - مکاتبات - تایید درآمد' ? (
-                        <div className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-                                {/* Right Column in UI */}
-                                <div className="space-y-4">
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="subject" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">موضوع</label>
-                                        <input id="subject" type="text" value={formData.subject} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="startDate" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">تاریخ آغاز</label>
-                                        <div className="relative w-full">
-                                            <input id="startDate" type="text" value={formData.startDate || '1404-07-28'} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="status" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">وضعیت</label>
-                                        <select id="status" value={formData.status} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="priority" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">اولویت</label>
-                                        <select id="priority" value={formData.priority} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                             {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="assignee" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">مسئول</label>
-                                        <div className="relative w-full">
-                                            <select id="assignee" value={formData.assignee} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
-                                            </select>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="year-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">سال</label>
-                                        <select id="year-doc" value={formData['year-doc'] || '1404'} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                           <option>1404</option><option>1403</option><option>1402</option>
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-row-reverse">
-                                        <label htmlFor="financial-note-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">رونوشت مالی</label>
-                                        <textarea id="financial-note-doc" value={formData['financial-note-doc'] || ''} onChange={handleInputChange} rows={6} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
-                                    </div>
-                                </div>
-
-                                {/* Left Column in UI */}
-                                <div className="space-y-4">
-                                     <div className="flex flex-row-reverse items-start">
-                                          <label className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-1">نوع مدارک <span className="text-red-500">*</span></label>
-                                          <div className="w-full space-y-2 text-sm">
-                                            {['اسناد رسیدگی', 'اسناد داخلی شرکت', 'زونکن متفرقه', 'دفاتر', 'مهر شرکت'].map(option => (
-                                                 <div key={option} className="flex items-center">
-                                                    <input id={`checkbox-doc-${option}`} name="docType" type="checkbox" className="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500" />
-                                                    <label htmlFor={`checkbox-doc-${option}`} className="mr-2 text-gray-700">{option}</label>
-                                                </div>
-                                            ))}
-                                          </div>
-                                     </div>
-                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="storage-loc-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">محل نگهداری مدارک <span className="text-red-500">*</span></label>
-                                        <select id="storage-loc-doc" value={formData['storage-loc-doc'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"><option>--- انتخاب کنید ---</option></select>
-                                    </div>
-                                    <div className="flex flex-row-reverse">
-                                        <label htmlFor="financial-opinion-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">اظهار نظر واحد مالی جهت تحویل</label>
-                                        <textarea id="financial-opinion-doc" value={formData['financial-opinion-doc'] || ''} onChange={handleInputChange} rows={3} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
-                                    </div>
-                                    <div className="flex flex-row-reverse">
-                                        <label htmlFor="response-opinion-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2 pt-2">اظهار نظر واحد پاسخگویی جهت تحویل</label>
-                                        <textarea id="response-opinion-doc" value={formData['response-opinion-doc'] || ''} onChange={handleInputChange} rows={3} className="block w-full border border-gray-300 rounded-md sm:text-sm p-3"></textarea>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="deliverer-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">تحویل دهنده</label>
-                                        <select id="deliverer-doc" value={formData['deliverer-doc'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"><option>--- انتخاب کنید ---</option></select>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="receiver-doc" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">تحویل گیرنده تایید کننده</label>
-                                        <input id="receiver-doc" type="text" value={formData['receiver-doc'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                    </div>
-                                </div>
-                            </div>
-                             <div className="border-t pt-6 mt-6 space-y-6">
-                                <div className="flex flex-row-reverse items-center">
-                                    <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">پیوست‌ها</label>
-                                    <div className="flex items-center gap-2">
-                                        <button type="button" className="text-gray-500 hover:text-sky-600">
-                                            <AddAttachmentIcon />
-                                        </button>
-                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
-                                    </div>
-                                </div>
-                                 <div className="flex flex-row-reverse items-center">
-                                    <label htmlFor="watchers-doc" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">ناظرها</label>
-                                    <input id="watchers-doc" type="text" value={formData['watchers-doc'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
                                 </div>
                             </div>
                         </div>
-                    ) : selectedIssueType === 'درصد پیشرفت کار شرکت' ? (
-                        <div className="space-y-6">
-                            {/* Standard fields */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-                                <div className="space-y-3">
-                                    <LabeledInput label="موضوع" id="subject-progress">
-                                        <input type="text" id="subject" value={formData.subject} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                    </LabeledInput>
-                                    <LabeledInput label="وضعیت" id="status-progress">
-                                        <select id="status" value={formData.status} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm">
-                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </LabeledInput>
-                                    <LabeledInput label="اولویت" id="priority-progress">
-                                        <select id="priority" value={formData.priority} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm">
-                                            {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </LabeledInput>
-                                </div>
-                                <div className="space-y-3">
-                                    <LabeledInput label="مسئول" id="assignee-progress">
-                                        <div className="relative w-full">
-                                            <select id="assignee" value={formData.assignee} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm">
-                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
-                                            </select>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
-                                        </div>
-                                    </LabeledInput>
-                                    <LabeledInput label="سال" id="year-progress">
-                                        <select id="year-progress" value={formData['year-progress'] || '1404'} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm">
-                                        <option>1404</option><option>1403</option><option>1402</option>
-                                        </select>
-                                    </LabeledInput>
-                                </div>
-                            </div>
-
-                            {/* Detailed fields */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-1 pt-6 mt-6 border-t border-gray-200">
-                                {/* Column 1 */}
-                                <div className="space-y-2">
-                                    { [ 'مبلغ سال یاد شده', 'ثبت صحیح فروش', 'ثبت فاکتور فروش', 'معرفی مفصل شفق فروش', 'ثبت مشخصات کارفرما فروش', 'معرفی مرکز اصلی فروش', 'آدرس و تلفنهای فروش', 'خلاصه فروش، الحاقیه، ضمن', 'معرفی عامل اصلی فروش', 'ثبت معاملات در برنامه فروش', 'ثبت صحیح نام کارفرما / خرید', 'معرفی مفصل شفق خرید', 'ثبت مشخصات فروشنده / خرید', 'معرفی مرکز هزینه خرید', 'اثبات پرداخت خرید', 'ثبت معاملات اصلی / خرید', 'مقایسه خرید با معاملات فصلی', 'ثبت صحیح هزینه حقوق', 'ارسال لیست حقوق / هزینه حقوق', 'ارسال لیست بیمه/هزینه حقوق', 'ثبت پرداخت اجاره/هزینه حقوق', 'پیگیری بابت فاکتور/سایر هزینه', 'ثبت پرداخت سایر هزینه', 'هزینه استهلاک / سایر هزینه', 'وضعیت ثبت اداری محل اجاره', 'پرینت بانک / ترازنامه', 'معرفی نسخه بانک ها/ترازنامه', 'کنترل اظهارنامه ارسالی/ترازنامه', 'سند افتتاحیه/ترازنامه', 'موجودی کالا/ترازنامه', 'حسین - حسابها و اسناد/ترازنامه' ].map(label => {
-                                        const id = `progress-${label.replace(/[\s/]/g, '-')}`;
-                                        return (
-                                            <div key={id} className="flex flex-row-reverse items-center">
-                                                <label htmlFor={id} className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">{label}</label>
-                                                <input id={id} type="text" value={formData[id] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-1 px-2 text-sm"/>
-                                            </div>
-                                        )
-                                    }) }
-                                </div>
-                                {/* Column 2 */}
-                                <div className="space-y-2">
-                                    { [ 'ثبت مدت صحیح قرارداد', 'رسیدگی و اقدام برتر شده', 'پیوست فروش', 'پیوست خرید و هزینه ها', 'پیوست حقوق', 'پیوست بیمه پرداخت ها', 'تحریر دفاتر', 'ثبت افتتاحیه', 'رسیدگی ارزش افزوده', 'پیگیری بعد از رسیدگی', 'حداقل های مورد نیاز رسیدگی' ].map(label => {
-                                        const id = `progress-${label.replace(/[\s/]/g, '-')}`;
-                                        return (
-                                            <div key={id} className="flex flex-row-reverse items-center">
-                                                <label htmlFor={id} className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">{label}</label>
-                                                <input id={id} type="text" value={formData[id] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-1 px-2 text-sm"/>
-                                            </div>
-                                        )
-                                    }) }
-                                </div>
-                                {/* Column 3 */}
-                                <div className="space-y-2">
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="work-group-progress" className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">گروه کاری</label>
-                                        <select id="work-group-progress" value={formData['work-group-progress'] || ''} onChange={handleInputChange} className="block w-full px-3 py-1 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"><option>---</option></select>
-                                    </div>
-                                    { [ 'اعتبار/ تعداد اسناد', 'ارزش اعتبار', 'امتیاز برگشت', 'امتیاز یک ها', 'جریمه / حمایت پرداختی', 'شناسنامه حساب سود و زیان' ].map(label => {
-                                        const id = `progress-${label.replace(/[\s/]/g, '-')}`;
-                                        return (
-                                            <div key={id} className="flex flex-row-reverse items-center">
-                                                <label htmlFor={id} className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">{label}</label>
-                                                <input id={id} type="text" value={formData[id] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-1 px-2 text-sm"/>
-                                            </div>
-                                        )
-                                    }) }
-                                </div>
-                                {/* Column 4 */}
-                                <div className="space-y-2">
-                                    { [ 'اسناد کارفرما/معاملات', 'اسناد قراردادها/شرکت', 'دلایل موجودی طلبکار/بدهکار', 'تعدیلات انحرافی', 'اسناد تصفیه اشخاص', 'جریمه کلیه سالها', 'رسیدگی مالیات حقوق وسطح', 'پیگیری / فصل / ترمیمی', 'پرداختی / مفاصا/ جریمه ها', 'اسناد گزارشات', 'پرداخت شده / فروردین', 'پرداختی / اردیبهشت', 'پرداختی / خرداد', 'پرداختی / تیر', 'پرداختی / مرداد', 'پرداختی / شهریور', 'پرداختی / مهر' ].map(label => {
-                                        const id = `progress-${label.replace(/[\s/]/g, '-')}`;
-                                        return (
-                                            <div key={id} className="flex flex-row-reverse items-center">
-                                                <label htmlFor={id} className="w-48 text-sm font-medium text-gray-700 text-right shrink-0 pr-1">{label}</label>
-                                                <input id={id} type="text" value={formData[id] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-1 px-2 text-sm"/>
-                                            </div>
-                                        )
-                                    }) }
-                                </div>
-                            </div>
-
-                            <div className="border-t pt-6 mt-6 space-y-6">
-                                <div className="flex flex-row-reverse items-center">
-                                    <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">پیوست‌ها</label>
-                                    <div className="flex items-center gap-2">
-                                        <button type="button" className="text-gray-500 hover:text-sky-600">
-                                            <AddAttachmentIcon />
-                                        </button>
-                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
-                                    </div>
-                                </div>
-                                <div className="flex flex-row-reverse items-center">
-                                    <label htmlFor="watchers-progress" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">ناظرها</label>
-                                    <input id="watchers-progress" type="text" value={formData['watchers-progress'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                </div>
-                            </div>
-                        </div>
-                    ) : selectedIssueType === 'درخواست لوازم مصرفی' ? (
-                        <div className="space-y-6">
-                            <div>
-                                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">موضوع</label>
-                                <input type="text" id="subject" value={formData.subject} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
-                            </div>
-
-                            <div>
-                                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
-                                <div className="border border-gray-300 rounded-md">
-                                    <EditorToolbar />
-                                    <textarea id="description" value={formData.description} onChange={handleInputChange} rows={8} className="block w-full border-0 rounded-b-md focus:ring-0 sm:text-sm p-3"></textarea>
-                                </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pt-6 mt-6 border-t border-gray-200">
-                                {/* Right Column in UI */}
-                                <div className="space-y-4">
-                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="status" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">وضعیت</label>
-                                        <select id="status" value={formData.status} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="priority" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">اولویت</label>
-                                        <select id="priority" value={formData.priority} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                             {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="assignee" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">مسئول</label>
-                                        <div className="relative w-full">
-                                            <select id="assignee" value={formData.assignee} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
-                                            </select>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="dueDate" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">تاریخ انجام</label>
-                                        <div className="relative w-full">
-                                            <input id="dueDate" type="text" value={formData.dueDate || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="item-name-consumables" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">نام کالا</label>
-                                        <select id="item-name-consumables" value={formData['item-name-consumables'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            <option>--- انتخاب کنید ---</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                {/* Left Column in UI */}
-                                <div className="space-y-4">
-                                     <div className="flex flex-row-reverse items-center">
-                                        <label htmlFor="work-group-consumables" className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">گروه کاری</label>
-                                        <select id="work-group-consumables" value={formData['work-group-consumables'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            <option>---</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                             <div className="border-t pt-6 mt-6">
-                                <div className="flex flex-row-reverse items-center">
-                                    <label className="w-28 text-sm font-medium text-gray-700 text-left shrink-0">پیوست‌ها</label>
-                                    <div className="flex items-center gap-2">
-                                        <button type="button" className="text-gray-500 hover:text-sky-600">
-                                            <AddAttachmentIcon />
-                                        </button>
-                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : selectedIssueType === 'حواله خروجی' ? (
-                        <div className="space-y-6">
-                            <div>
-                                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">موضوع</label>
-                                <input type="text" id="subject" value={formData.subject} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
-                            </div>
-
-                            <div>
-                                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
-                                <div className="border border-gray-300 rounded-md">
-                                    <EditorToolbar />
-                                    <textarea id="description" value={formData.description} onChange={handleInputChange} rows={8} className="block w-full border-0 rounded-b-md focus:ring-0 sm:text-sm p-3"></textarea>
-                                </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pt-6 mt-6 border-t border-gray-200">
-                                {/* Right Column in UI */}
-                                <div className="space-y-4">
-                                     <LabeledInput label="وضعیت" id="status-exit-label">
-                                        <select id="status" value={formData.status} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </LabeledInput>
-                                    <LabeledInput label="اولویت" id="priority-exit-label">
-                                        <select id="priority" value={formData.priority} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                             {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </LabeledInput>
-                                    <LabeledInput label="مسئول" id="assignee-exit-label">
-                                        <div className="relative w-full">
-                                            <select id="assignee" value={formData.assignee} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
-                                            </select>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
-                                        </div>
-                                    </LabeledInput>
-                                     <LabeledInput label="نام کالا" id="item-name-exit-label">
-                                        <select id="item-name-exit" value={formData['item-name-exit'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            <option>--- انتخاب کنید ---</option>
-                                        </select>
-                                    </LabeledInput>
-                                </div>
-                                {/* Left Column in UI */}
-                                <div className="space-y-4">
-                                    <LabeledInput label="تاریخ آغاز" id="start-date-exit-label">
-                                        <div className="relative w-full">
-                                            <input id="startDate" type="text" value={formData.startDate || '۱۴۰۴-۰۷-۲۸'} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
-                                        </div>
-                                    </LabeledInput>
-                                    <LabeledInput label="تاریخ سررسید" id="due-date-exit-label">
-                                        <div className="relative w-full">
-                                            <input id="dueDate" type="text" value={formData.dueDate || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
-                                        </div>
-                                    </LabeledInput>
-                                     <LabeledInput label="گروه کاری" id="work-group-exit-label">
-                                        <select id="work-group-exit" value={formData['work-group-exit'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            <option>---</option>
-                                        </select>
-                                    </LabeledInput>
-                                </div>
-                            </div>
-
-                             <div className="border-t pt-6 mt-6 space-y-6">
-                                <div className="flex flex-row-reverse items-center">
-                                    <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">پیوست‌ها</label>
-                                    <div className="flex items-center gap-2">
-                                        <button type="button" className="text-gray-500 hover:text-sky-600">
-                                            <AddAttachmentIcon />
-                                        </button>
-                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
-                                    </div>
-                                </div>
-                                 <div className="flex flex-row-reverse items-center">
-                                    <label htmlFor="watchers-exit" className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">ناظرها</label>
-                                    <input id="watchers-exit" type="text" value={formData['watchers-exit'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                </div>
-                            </div>
-                        </div>
-                    ) : selectedIssueType === 'پاداش و جرایم' ? (
-                        <div className="space-y-6">
-                            <div>
-                                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">موضوع</label>
-                                <input type="text" id="subject" value={formData.subject} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
-                            </div>
-
-                            <div>
-                                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
-                                <div className="border border-gray-300 rounded-md">
-                                    <EditorToolbar />
-                                    <textarea id="description" value={formData.description} onChange={handleInputChange} rows={8} className="block w-full border-0 rounded-b-md focus:ring-0 sm:text-sm p-3"></textarea>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pt-6 mt-6 border-t border-gray-200">
-                                {/* Right Column in UI */}
-                                <div className="space-y-4">
-                                    <LabeledInput label="وضعیت" id="status-bonus-label">
-                                        <select id="status" value={formData.status} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </LabeledInput>
-                                    <LabeledInput label="اولویت" id="priority-bonus-label">
-                                        <select id="priority" value={formData.priority} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                        </select>
-                                    </LabeledInput>
-                                    <LabeledInput label="مسئول" id="assignee-bonus-label">
-                                        <div className="relative w-full">
-                                            <select id="assignee" value={formData.assignee} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                                <option>---</option>{users.map(user => <option key={user}>{user}</option>)}
-                                            </select>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><PersonIcon /></div>
-                                        </div>
-                                    </LabeledInput>
-                                    <LabeledInput label="سال" id="year-bonus-label">
-                                        <select id="year-bonus" value={formData['year-bonus'] || '1404'} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                        <option>1404</option><option>1403</option><option>1402</option>
-                                        </select>
-                                    </LabeledInput>
-                                    <LabeledInput label="مبلغ درآمد سال یاد شده" id="income-bonus-label">
-                                        <input type="text" id="income-bonus" value={formData['income-bonus'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                    </LabeledInput>
-                                </div>
-                                {/* Left Column in UI */}
-                                <div className="space-y-4">
-                                    <LabeledInput label="تاریخ آغاز" id="start-date-bonus-label">
-                                        <div className="relative w-full">
-                                            <input id="startDate" type="text" value={formData.startDate || '۱۴۰۴-۰۷-۲۸'} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
-                                        </div>
-                                    </LabeledInput>
-                                    <LabeledInput label="تاریخ سررسید" id="due-date-bonus-label">
-                                        <div className="relative w-full">
-                                            <input id="dueDate" type="text" value={formData.dueDate || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 pl-10 text-sm"/>
-                                            <div className="absolute left-3 inset-y-0 flex items-center pointer-events-none"><CalendarIcon /></div>
-                                        </div>
-                                    </LabeledInput>
-                                    <LabeledInput label="زمان برآورد شده" id="estimated-time-bonus-label">
-                                        <div className="flex items-center w-full">
-                                            <input id="estimated-time-bonus" type="text" value={formData['estimated-time-bonus'] || ''} onChange={handleInputChange} className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm"/>
-                                            <span className="mr-2 text-sm text-gray-500">ساعت</span>
-                                        </div>
-                                    </LabeledInput>
-                                    <LabeledInput label="انجام شده %" id="done-ratio-bonus-label">
-                                        <select id="done-ratio-bonus" value={formData['done-ratio-bonus'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            {['0 %', '10 %', '20 %', '30 %', '40 %', '50 %', '60 %', '70 %', '80 %', '90 %', '100 %'].map(p => <option key={p}>{p}</option>)}
-                                        </select>
-                                    </LabeledInput>
-                                    <LabeledInput label="گروه کاری" id="work-group-bonus-label">
-                                        <select id="work-group-bonus" value={formData['work-group-bonus'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm">
-                                            <option>---</option>
-                                        </select>
-                                    </LabeledInput>
-                                </div>
-                            </div>
-
-                            <div className="border-t pt-6 mt-6">
-                                <div className="flex flex-row-reverse items-center">
-                                    <label className="w-40 text-sm font-medium text-gray-700 text-right shrink-0 pr-2">پیوست‌ها</label>
-                                    <div className="flex items-center gap-2">
-                                        <button type="button" className="text-gray-500 hover:text-sky-600">
-                                            <AddAttachmentIcon />
-                                        </button>
-                                        <span className="text-xs text-gray-500">(بیشترین اندازه: ۱۰ مگابایت)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : selectedIssueType ? (
-                        <>
-                            <div>
-                                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">موضوع <span className="text-red-500">*</span></label>
-                                <input type="text" id="subject" value={formData.subject} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
-                            </div>
-
-                            <div>
-                                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
-                                <div className="border border-gray-300 rounded-md">
-                                    <EditorToolbar />
-                                    <textarea id="description" rows={10} value={formData.description} onChange={handleInputChange} className="block w-full border-0 rounded-b-md focus:ring-0 sm:text-sm p-3"></textarea>
-                                </div>
-                            </div>
-
-                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 border-t pt-6">
-                                 <div>
-                                    <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">وضعیت</label>
-                                    <select id="status" value={formData.status} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
-                                        {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">اولویت</label>
-                                    <select id="priority" value={formData.priority} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
-                                        {priorityOptions.map(opt => <option key={opt}>{opt}</option>)}
-                                    </select>
-                                </div>
-                                 <div>
-                                    <label htmlFor="assignee" className="block text-sm font-medium text-gray-700 mb-1">مسئول</label>
-                                    <select id="assignee" value={formData.assignee} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
-                                        <option>--- انتخاب کنید ---</option>
-                                        {users.map(user => <option key={user}>{user}</option>)}
-                                    </select>
-                                </div>
-                                <div className="relative">
-                                    <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">تاریخ آغاز</label>
-                                    <input type="text" id="startDate" value={formData.startDate} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" placeholder="1403/05/01" />
-                                    <span className="absolute left-3 top-8"><CalendarIcon /></span>
-                                </div>
-                                <div className="relative">
-                                    <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">تاریخ سررسید</label>
-                                    <input type="text" id="dueDate" value={formData.dueDate} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
-                                     <span className="absolute left-3 top-8"><CalendarIcon /></span>
-                                </div>
-                                  <div>
-                                    <label htmlFor="request-type" className="block text-sm font-medium text-gray-700 mb-1">نوع درخواست</label>
-                                    <select id="request-type" value={formData['request-type'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
-                                       <option>--- انتخاب کنید ---</option>
-                                    </select>
-                                </div>
-                             </div>
-
-                             <div>
-                                <label htmlFor="extra-desc" className="block text-sm font-medium text-gray-700 mb-1">توضیح</label>
-                                <input type="text" id="extra-desc" value={formData['extra-desc'] || ''} onChange={handleInputChange} className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm" />
-                            </div>
-                        </>
-                    ) : null}
+                    ) : null }
+                    <div className="pt-6 flex items-center gap-4">
+                        <button type="button" onClick={() => handleSubmit(false)} className="px-6 py-2 bg-sky-600 text-white font-semibold rounded-md hover:bg-sky-700 transition-colors">
+                            ساخت
+                        </button>
+                         <button type="button" onClick={() => handleSubmit(true)} className="px-6 py-2 bg-sky-600 text-white font-semibold rounded-md hover:bg-sky-700 transition-colors">
+                            ساخت و ادامه
+                        </button>
+                    </div>
                 </form>
             </div>
-            {selectedIssueType && (
-                <div className="flex justify-start bg-[#37474f] -mx-0 -mb-0 px-6 py-4 rounded-b-lg">
-                    <button type="button" onClick={() => handleSubmit(true)} className="mr-4 px-8 py-2 bg-[#1e88e5] text-white font-semibold rounded-md hover:bg-sky-700 transition-colors">ساخت و ادامه</button>
-                    <button type="button" onClick={() => handleSubmit(false)} className="px-8 py-2 bg-[#00acc1] text-white font-semibold rounded-md hover:bg-teal-600 transition-colors">ساخت</button>
-                </div>
-            )}
-        </div>
-    );
-}
-
-const AssetsPage = () => {
-    const [filtersOpen, setFiltersOpen] = useState(true);
-    const [optionsOpen, setOptionsOpen] = useState(true);
-
-    const assetsData = [
-        { id: '83453', project: 'واحد عملکرد مالیاتی', type: 'تجهیزات', status: 'در حال استفاده', title: 'موتور برق', recipient: 'سید رحیم محفوظیان', updatedAt: '1400/07/12 16:58' },
-        { id: '83398', project: 'واحد عملکرد مالیاتی', type: 'کامپیوتر', status: 'در حال استفاده', title: 'All in One Dell', recipient: 'علیرضا ابومسیح', updatedAt: '1400/07/12 10:52' },
-        { id: '81698', project: 'واحد عملکرد مالیاتی', type: 'تجهیزات', status: 'در حال استفاده', title: 'داکت تلفن های گرند استریم voip gp755', recipient: 'جواد صالحی', updatedAt: '1400/07/26 16:49' },
-        { id: '81537', project: 'واحد عملکرد مالیاتی', type: 'تجهیزات', status: 'در حال استفاده', title: 'دوربین راهروی طبقه 3 وصال', recipient: '', updatedAt: '1400/06/25 14:39' },
-        { id: '81536', project: 'واحد عملکرد مالیاتی', type: 'تجهیزات', status: 'در حال استفاده', title: 'دوربین واحد عملکرد وصال', recipient: '', updatedAt: '1400/06/25 14:32' },
-        { id: '81535', project: 'واحد عملکرد مالیاتی', type: 'تجهیزات', status: 'در حال استفاده', title: 'دوربین واحد آموزش وصال', recipient: '', updatedAt: '1400/06/25 14:31' },
-    ];
-    
-    return (
-        <div className="p-4 sm:p-0 bg-white rounded-lg shadow-md animate-fade-in-fast">
-             <div className="flex justify-between items-center mb-4 px-4 pt-4">
-                <div className="flex items-center gap-4">
-                    <button onClick={() => setFiltersOpen(!filtersOpen)} className="flex items-center gap-1 text-sm font-semibold text-gray-600">
-                        {filtersOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                        <span>غربال‌ها</span>
-                    </button>
-                    <button onClick={() => setOptionsOpen(!optionsOpen)} className="flex items-center gap-1 text-sm font-semibold text-gray-600">
-                         {optionsOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                        <span>گزینه‌ها</span>
-                    </button>
-                </div>
-                <button className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 font-semibold text-sm rounded-md hover:bg-gray-300">
-                    <span className="text-lg">+</span>
-                    <span>دارایی جدید</span>
-                </button>
-            </div>
-
-            {filtersOpen && (
-                 <div className="px-4 pb-4 border-b">
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center">
-                            <input id="status-filter" type="checkbox" defaultChecked className="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500" />
-                            <label htmlFor="status-filter" className="mr-2 text-sm font-medium text-gray-700">وضعیت</label>
-                        </div>
-                         <select className="w-48 px-3 py-1.5 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
-                            <option>موجود</option>
-                         </select>
-                         <button className="text-sm text-sky-600 font-semibold hover:underline">+ افزودن غربال</button>
-                    </div>
-                </div>
-            )}
-             {optionsOpen && (
-                 <div className="px-4 py-2 border-b">
-                     <div className="flex items-center justify-end gap-2">
-                        <button className="p-1.5 border rounded-md hover:bg-gray-100"><TableIcon /></button>
-                        <button className="p-1.5 border rounded-md hover:bg-gray-100"><XIcon /></button>
-                         <button className="p-1.5 border rounded-md hover:bg-gray-100"><ChevronDownIcon /></button>
-                    </div>
-                 </div>
-             )}
-            
-            <div className="overflow-x-auto">
-                 <table className="min-w-full text-sm text-right">
-                    <thead className="bg-[#f0ece1] text-gray-700">
-                        <tr>
-                            <th className="p-3 w-4"><input type="checkbox" className="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500" /></th>
-                            <th className="p-3 font-semibold">#</th>
-                            <th className="p-3 font-semibold">پروژه</th>
-                            <th className="p-3 font-semibold">نوع دارایی</th>
-                            <th className="p-3 font-semibold">وضعیت</th>
-                            <th className="p-3 font-semibold">عنوان</th>
-                            <th className="p-3 font-semibold">تحویل‌گیرنده</th>
-                            <th className="p-3 font-semibold">به‌روز شده در</th>
-                            <th className="p-3 font-semibold"></th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                        {assetsData.map(asset => (
-                             <tr key={asset.id} className="hover:bg-gray-50">
-                                <td className="p-3"><input type="checkbox" className="w-4 h-4 text-sky-600 bg-gray-100 border-gray-300 rounded focus:ring-sky-500" /></td>
-                                <td className="p-3 text-sky-600 hover:underline cursor-pointer">{asset.id}</td>
-                                <td className="p-3">{asset.project}</td>
-                                <td className="p-3">{asset.type}</td>
-                                <td className="p-3">{asset.status}</td>
-                                <td className="p-3">{asset.title}</td>
-                                <td className="p-3">{asset.recipient}</td>
-                                <td className="p-3 text-gray-500">{asset.updatedAt}</td>
-                                <td className="p-3"><button><EllipsisIcon /></button></td>
-                            </tr>
-                        ))}
-                    </tbody>
-                 </table>
-            </div>
-        </div>
-    );
-}
-
-interface IssuesListPageProps {
-    issues: Issue[];
-    onNewIssueClick: () => void;
-}
-
-const IssuesListPage: React.FC<IssuesListPageProps> = ({ issues, onNewIssueClick }) => {
-    const getStatusClass = (status: string) => {
-        switch (status) {
-            case 'برای انجام': return 'bg-gray-200 text-gray-800';
-            case 'در حال بررسی': return 'bg-blue-100 text-blue-800';
-            case 'انجام شده': return 'bg-green-100 text-green-800';
-            default: return 'bg-gray-100 text-gray-800';
-        }
-    };
-
-    return (
-        <div className="bg-white rounded-lg shadow-md animate-fade-in-fast">
-            <div className="flex justify-between items-center p-4 border-b">
-                <h2 className="text-xl font-bold text-gray-800">مسئله‌ها</h2>
-                <button 
-                    onClick={onNewIssueClick}
-                    className="flex items-center gap-2 px-4 py-2 bg-sky-600 text-white font-semibold text-sm rounded-md hover:bg-sky-700 transition-colors"
-                >
-                    <span className="text-lg">+</span>
-                    <span>مسئله جدید</span>
-                </button>
-            </div>
-            <div className="overflow-x-auto">
-                 <table className="min-w-full text-sm text-right">
-                    <thead className="bg-gray-50 text-gray-600 font-semibold">
-                        <tr>
-                            <th className="p-3 text-right">#</th>
-                            <th className="p-3 text-right">پروژه</th>
-                            <th className="p-3 text-right">موضوع</th>
-                            <th className="p-3 text-right">وضعیت</th>
-                            <th className="p-3 text-right">مسئول</th>
-                            <th className="p-3 text-right">به‌روز شده در</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                        {issues.map(issue => (
-                             <tr key={issue.id} className="hover:bg-gray-50">
-                                <td className="p-3 text-sky-600 hover:underline cursor-pointer">{issue.id}</td>
-                                <td className="p-3">{issue.project}</td>
-                                <td className="p-3">{issue.subject}</td>
-                                <td className="p-3">
-                                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusClass(issue.status)}`}>
-                                        {issue.status}
-                                    </span>
-                                </td>
-                                <td className="p-3">{issue.assignee || '---'}</td>
-                                <td className="p-3 text-gray-500">{issue.updatedAt}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                 </table>
-            </div>
         </div>
     );
 };
 
-
-interface ProjectsPageProps {
-    activeView: View;
-    setActiveView: (view: View) => void;
-    isAdmin: boolean;
-    issues: Issue[];
-    onCreateIssue: (issue: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>) => void;
-}
-
-const ProjectsPage: React.FC<ProjectsPageProps> = ({ activeView, setActiveView, isAdmin, issues, onCreateIssue }) => {
-    const modules = [
-        { id: View.ProjectsOverview, label: 'پروژه' },
-        { id: View.ProjectsTimeline, label: 'خط زمان' },
-        { id: View.ProjectsIssues, label: 'مسئله ها' },
-        { id: View.ProjectsTimes, label: 'زمان ها' },
-        { id: View.ProjectsGantt, label: 'گانت' },
-        { id: View.ProjectsCalendar, label: 'تقویم' },
-        { id: View.ProjectsBlog, label: 'وبلاگ' },
-        { id: View.ProjectsAssets, label: 'اموال' },
-    ];
+export const MainContent: React.FC<MainContentProps> = (props) => {
+    const { 
+        activeView, 
+        setActiveView, 
+        isAdmin, 
+        issues, 
+        onCreateIssue, 
+        users, 
+        onCreateUser,
+        groups,
+        onCreateGroup,
+        onUpdateGroup,
+        roles,
+        onCreateRole,
+        projects,
+        onCreateProject
+    } = props;
     
-    const currentActiveView = activeView === View.Projects ? View.ProjectsIssues : activeView;
-
-    const handleIssueCreated = (newIssueData: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>) => {
-        onCreateIssue(newIssueData);
-        setActiveView(View.ProjectsIssues);
-    };
-
-    const renderModuleContent = () => {
-        const ModuleCard: React.FC<{title: string; children: React.ReactNode}> = ({title, children}) => (
-            <div className="p-8 bg-white rounded-lg shadow-md animate-fade-in-fast">
-                <h2 className="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-4 mb-4">{title}</h2>
-                <div className="text-slate-600">{children}</div>
-            </div>
-        );
-
-        switch (currentActiveView) {
-            case View.ProjectsOverview:
-                return <ModuleCard title="نمای کلی پروژه">اینجا داشبورد و اطلاعات کلی پروژه نمایش داده می شود.</ModuleCard>;
-            case View.ProjectsTimeline:
-                return <TimelinePage />;
-            case View.ProjectsIssues:
-                return <IssuesListPage issues={issues} onNewIssueClick={() => setActiveView(View.ProjectsNewIssue)} />;
-            case View.ProjectsNewIssue:
-                return <NewIssuePage onCreateIssue={handleIssueCreated} onCancel={() => setActiveView(View.ProjectsIssues)} /> 
-             case View.ProjectsAssets:
-                return <AssetsPage />;
-            case View.ProjectsCalendar:
-                return <CalendarPage />;
-            default:
-                 const module = modules.find(m => m.id === currentActiveView);
-                 const title = module ? module.label : '';
-                return <ModuleCard title={title}>محتوای صفحه "{title}" در اینجا قرار خواهد گرفت.</ModuleCard>;
-        }
-    };
-    
-    const getBaseView = (view: View) => {
-        if (view === View.ProjectsNewIssue) return View.ProjectsIssues;
-        return view;
-    };
-    const baseActiveView = getBaseView(currentActiveView);
-
-    return (
-        <div className="space-y-6 animate-fade-in">
-            <div style={{backgroundColor: '#ebebf2'}} className="p-4 rounded-lg shadow-sm flex items-center justify-between">
-                 <nav className="flex items-baseline space-x-2 space-x-reverse">
-                     {modules.map(module => (
-                         <button
-                           key={module.id}
-                           onClick={() => setActiveView(module.id)}
-                           className={`px-4 py-2 text-sm font-semibold transition-colors duration-200 ease-in-out rounded-md ${
-                                baseActiveView === module.id
-                                ? 'text-red-600 border-b-2 border-red-600'
-                                : 'text-gray-600 hover:bg-gray-300/50'
-                            }`}
-                         >
-                           {module.label}
-                         </button>
-                     ))}
-                 </nav>
-                 <div className="flex items-center gap-2">
-                    <h2 className="text-lg font-bold text-[#4a428d]">برنامه جلسه های مودیان</h2>
-                </div>
-            </div>
-
-            <div className="mt-6">
-                {renderModuleContent()}
-            </div>
-        </div>
-    );
-};
-
-
-export const MainContent: React.FC<MainContentProps> = ({ activeView, setActiveView, isAdmin, issues, onCreateIssue }) => {
-  const renderContent = () => {
-    if (activeView.startsWith('پروژه')) {
-        return <ProjectsPage activeView={activeView} setActiveView={setActiveView} isAdmin={isAdmin} issues={issues} onCreateIssue={onCreateIssue} />;
+    // Management views are handled within ManagementPage component, which has its own sub-router.
+    if (activeView.startsWith(View.Management)) {
+        return <ManagementPage 
+            activeView={activeView}
+            setActiveView={setActiveView}
+            users={users}
+            onCreateUser={onCreateUser}
+            groups={groups}
+            onCreateGroup={onCreateGroup}
+            onUpdateGroup={onUpdateGroup}
+            roles={roles}
+            onCreateRole={onCreateRole}
+        />;
     }
-    if (activeView.startsWith('راه بری')) {
-        return <ManagementPage activeView={activeView} setActiveView={setActiveView} />;
-    }
-      
+
     switch (activeView) {
-      case View.HomePage:
-        return <HomePage />;
-      case View.MyPage:
-        return <MyPage />;
-      case View.Help:
-        return (
-          <div className="transform hover:scale-105 transition-transform duration-300 animate-fade-in">
-            <ContentCard icon={<HelpIcon />} title="راهنما و پشتیبانی">
-              برای راهنمایی در مورد نحوه استفاده از سیستم و تماس با پشتیبانی، به این بخش مراجعه کنید.
-            </ContentCard>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+        case View.HomePage:
+            return <HomePage />;
+        case View.MyPage:
+            return <MyPage />;
+        
+        case View.Projects:
+            return <ProjectsDashboard projects={projects} setActiveView={setActiveView} isAdmin={isAdmin} />;
 
-  return (
-    <div className="mt-2">
-      {renderContent()}
-    </div>
-  );
+        case View.ProjectsNew:
+            return <NewProjectPage 
+                onCreateProject={(project) => { 
+                    onCreateProject(project); 
+                    setActiveView(View.Projects);
+                }} 
+                onCancel={() => setActiveView(View.Projects)} 
+            />;
+        
+        case View.ProjectsIssues:
+            return <ProjectsPage issues={issues} setActiveView={setActiveView} />;
+
+        case View.ProjectsNewIssue:
+            return <NewIssuePage 
+                onCreateIssue={(issue) => { 
+                    onCreateIssue(issue); 
+                    // After creating an issue, navigate back to the issues list.
+                    setActiveView(View.ProjectsIssues);
+                }} 
+                onCancel={() => setActiveView(View.ProjectsIssues)} 
+            />;
+        
+        // Other project sub-views
+        case View.ProjectsTimeline:
+            return <TimelinePage />;
+        case View.ProjectsCalendar:
+            return <CalendarPage />;
+        case View.ProjectsGantt:
+            return <GanttPage issues={issues} />;
+
+        case View.Help:
+            return <HelpPage />;
+        
+        // Fallback for any unhandled views like ProjectsOverview, ProjectsBlog, etc.
+        default:
+            return <HomePage />;
+    }
 };
