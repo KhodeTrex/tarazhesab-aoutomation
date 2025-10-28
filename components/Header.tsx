@@ -23,13 +23,13 @@ const baseNavItems = [
 const adminNavItem = { id: View.Management, label: 'راه بری' };
 
 const UserIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
     </svg>
 );
 
 const LogoutIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
     </svg>
 );
@@ -56,16 +56,15 @@ export const Header: React.FC<HeaderProps> = ({ activeView, setActiveView, isAdm
         <div className="flex items-center justify-between h-16">
           {/* Left side in RTL */}
           <div className="flex items-center">
-            <div className="relative group">
-                <button className="flex items-center space-x-2 space-x-reverse text-sm font-medium">
+            <div className="flex items-center space-x-4 space-x-reverse">
+                <div className="flex items-center space-x-2 space-x-reverse text-sm font-medium">
                     <UserIcon />
                     <span className="text-white">{username}</span>
-                    <ChevronDownIcon className="h-4 w-4 text-white"/>
-                </button>
-                <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30 opacity-0 group-hover:opacity-100 transition-opacity invisible group-hover:visible">
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">حساب من</a>
-                    <button onClick={onLogout} className="w-full text-right block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">خروج</button>
                 </div>
+                <button onClick={onLogout} className="flex items-center space-x-1 space-x-reverse text-gray-300 hover:text-white transition-colors">
+                    <LogoutIcon />
+                    <span className="text-sm">خروج</span>
+                </button>
             </div>
              <div className="flex items-center gap-x-2 mr-4">
                 <button
