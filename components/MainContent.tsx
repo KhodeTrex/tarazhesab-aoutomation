@@ -480,6 +480,8 @@ export const MainContent: React.FC<MainContentProps> = (props) => {
             onUpdateGroup={onUpdateGroup}
             roles={roles}
             onCreateRole={onCreateRole}
+            projects={projects}
+            onCreateProject={onCreateProject}
         />;
     }
 
@@ -490,16 +492,7 @@ export const MainContent: React.FC<MainContentProps> = (props) => {
             return <MyPage />;
         
         case View.Projects:
-            return <ProjectsDashboard projects={projects} setActiveView={setActiveView} isAdmin={isAdmin} />;
-
-        case View.ProjectsNew:
-            return <NewProjectPage 
-                onCreateProject={(project) => { 
-                    onCreateProject(project); 
-                    setActiveView(View.Projects);
-                }} 
-                onCancel={() => setActiveView(View.Projects)} 
-            />;
+            return <ProjectsDashboard projects={projects} setActiveView={setActiveView} />;
         
         case View.ProjectsIssues:
             return <ProjectsPage issues={issues} setActiveView={setActiveView} />;

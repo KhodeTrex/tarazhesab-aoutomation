@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Group, Role, User } from '../types';
+import { View, Group, Role, User, Project } from '../types';
 import { NewUserPage } from './NewUserPage';
 import { UsersListPage } from './UsersListPage';
 import { GroupsListPage } from './GroupsListPage';
@@ -9,6 +9,8 @@ import { NewRolePage } from './NewRolePage';
 import { EditRolePage } from './EditRolePage';
 import { SettingsPage } from './SettingsPage';
 import { GroupDetailsPage } from './GroupDetailsPage';
+import { ManagementProjectsPage } from './ManagementProjectsPage';
+import { NewProjectPage } from './NewProjectPage';
 
 // --- Icons ---
 const ProjectsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
@@ -73,9 +75,23 @@ interface ManagementPageProps {
     onUpdateGroup: (group: Group) => void;
     roles: Role[];
     onCreateRole: (roleName: string) => void;
+    projects: Project[];
+    onCreateProject: (project: Omit<Project, 'id' | 'createdAt'>) => void;
 }
 
-export const ManagementPage: React.FC<ManagementPageProps> = ({ activeView, setActiveView, users, onCreateUser, groups, onCreateGroup, onUpdateGroup, roles, onCreateRole }) => {
+export const ManagementPage: React.FC<ManagementPageProps> = ({ 
+    activeView, 
+    setActiveView, 
+    users, 
+    onCreateUser, 
+    groups, 
+    onCreateGroup, 
+    onUpdateGroup, 
+    roles, 
+    onCreateRole,
+    projects,
+    onCreateProject
+}) => {
     const [roleToEdit, setRoleToEdit] = useState<Role | null>(null);
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
@@ -89,6 +105,21 @@ export const ManagementPage: React.FC<ManagementPageProps> = ({ activeView, setA
         setActiveView(View.ManagementGroupDetails);
     };
 
+    if (activeView === View.ManagementProjects) {
+        return <ManagementProjectsPage projects={projects} setActiveView={setActiveView} />;
+    }
+
+    if (activeView === View.ManagementNewProject) {
+        return <NewProjectPage 
+            onCreateProject={(project) => { 
+                onCreateProject(project); 
+                setActiveView(View.ManagementProjects);
+            }} 
+            onCancel={() => setActiveView(View.ManagementProjects)} 
+            projects={projects}
+            users={users}
+        />;
+    }
 
     if (activeView === View.ManagementNewUser) {
         return <NewUserPage onBack={() => setActiveView(View.ManagementUsers)} onCreateUser={onCreateUser} />;
@@ -136,7 +167,7 @@ export const ManagementPage: React.FC<ManagementPageProps> = ({ activeView, setA
 
     const cardsWithActions = adminCards.map(card => {
         if (card.title === 'پروژه ها') {
-            return { ...card, onClick: () => setActiveView(View.Projects) };
+            return { ...card, onClick: () => setActiveView(View.ManagementProjects) };
         }
         if (card.title === 'کاربران') {
             return { ...card, onClick: () => setActiveView(View.ManagementUsers) };

@@ -15,9 +15,10 @@ export enum View {
   ManagementNewRole = 'راه بری/نقش جدید',
   ManagementEditRole = 'راه بری/ویرایش نقش',
   ManagementSettings = 'راه بری/تنظیمات',
+  ManagementProjects = 'راه بری/پروژه ها',
+  ManagementNewProject = 'راه بری/پروژه جدید',
   
   // Projects sub-views
-  ProjectsNew = 'پروژه ها/پروژه جدید',
   ProjectsOverview = 'پروژه ها/پروژه',
   ProjectsTimeline = 'پروژه ها/خط زمان',
   ProjectsIssues = 'پروژه ها/مسئله ها',
@@ -75,6 +76,19 @@ export interface Project {
   name: string;
   description: string;
   identifier: string;
+  homepage?: string;
   isPublic: boolean;
+  parentProjectId?: number | null;
+  inheritMembers?: boolean;
+  shortNamePerformance?: string;
+  shortNameVat?: string;
+  responsibleUserId?: number;
+  workingHours?: string[];
+  invoiceCapacity?: string;
+  tradeSystemRegStatus?: string;
+  system20RegStatus?: string;
+  serviceStatus?: string;
+  contactNumber?: string;
+  useTools?: boolean;
   createdAt: string;
 }
